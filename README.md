@@ -25,7 +25,7 @@ docker build -t go-saas-kit-user:local -f user/Dockerfile .
 docker build -t go-saas-kit-saas:local -f saas/Dockerfile .
 docker build -t go-saas-kit-sys:local -f sys/Dockerfile .
 
-
+no hay como subir
 
 # Desplegar todo el sistema
 docker compose -f docker-compose-local.yml --env-file global.env up -d
