@@ -1,0 +1,82 @@
+version: '3.7'
+services:
+  # Infraestructura
+  mysqld:
+    image: mysql:8.0
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=youShouldChangeThis
+      - MYSQL_ROOT_HOST=%
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3406:3306"
+
+  redis:
+    image: redis:6.0
+    restart: always
+    command: redis-server --requirepass youShouldChangeThis
+    ports:
+      - "7379:6379"
+
+  etcd:
+    image: bitnami/etcd:3.5.0
+    restart: always
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+    ports:
+      - "3379:2379"
+    volumes:
+      - etcd_data:/bitnami/etcd
+
+  # API Gateway
+  apisix:
+    image: simple-apisix:local
+    ports:
+      - "80:9080"
+    restart: unless-stopped
+    depends_on:
+      - etcd
+    environment:
+      - ETCD_HOST=etcd
+      - ETCD_PORT=2379
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # Dashboard para APISIX
+  apisix-dashboard:
+    image: apache/apisix-dashboard:3.0.1-alpine
+    restart: always
+    volumes:
+      - ./kit/quickstart/configs/apisix/dashboard_conf/conf.yaml:/usr/local/apisix-dashboard/conf/conf.yaml
+    ports:
+      - "9000:9000"
+
+  # Core Service (usando imagen local)
+  user:
+    image: simple-user:debug
+    #image: simple-user:local
+    depends_on:
+      - mysqld
+      - redis
+    ports:
+      - "8000:8000"  # Asegúrate de que esta línea esté presente y descomentada
+    volumes:
+      - ./kit/quickstart/configs:/data/conf
+      - ./kit/quickstart/.assets:/app/.assets
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # Frontend
+  # Frontend (usar la etiqueta correcta, por ejemplo 'go-saas-kit-frontend:latest' o la que tengas)
+# Frontend (usando la imagen existente)
+  web:
+    image: goxiaoy/go-saas-kit-frontend:dev
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+volumes:
+  mysql_data:
+  etcd_data:
