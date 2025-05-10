@@ -1,0 +1,16 @@
+syntax = "proto3";
+package apisix.internal;
+
+option go_package = "github.com/go-saas/kit/gateway/apisix/internal/conf;conf";
+
+import "conf/conf.proto";
+
+message Bootstrap {
+  conf.Security security=3;
+  conf.Services services =4;
+  conf.Logging logging=5;
+  conf.Tracers tracing=7;
+  conf.AppConfig app=8;
+}
+
+

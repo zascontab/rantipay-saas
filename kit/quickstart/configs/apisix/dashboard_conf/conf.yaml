@@ -1,0 +1,11 @@
+conf:
+  listen:
+    host: 0.0.0.0
+    port: 9000
+  etcd:
+    endpoints:
+      - etcd:2379
+  auth:
+    enable: true
+    username: admin
+    password: admin

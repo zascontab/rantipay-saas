@@ -1,0 +1,151 @@
+syntax = "proto3";
+
+package user.api.permission.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/struct.proto";
+import "validate/validate.proto";
+
+
+option go_package = "github.com/go-saas/kit/user/api/permission/v1;v1";
+
+service PermissionService{
+
+  // Get current permission
+  rpc GetCurrent(GetCurrentPermissionRequest)returns(GetCurrentPermissionReply){
+    option (google.api.http) = {
+      get: "/v1/permission/current"
+    };
+  }
+
+  rpc CheckCurrent(CheckPermissionRequest)returns(CheckPermissionReply){
+    option (google.api.http) = {
+      post: "/v1/permission/check"
+      body: "*"
+    };
+  }
+}
+
+
+
+
+message GetCurrentPermissionRequest{
+
+}
+
+message GetCurrentPermissionReply{
+  repeated Permission acl = 1;
+}
+
+
+message CheckPermissionRequest{
+  string namespace = 1 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  string resource = 2 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  string action = 3 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+}
+
+message CheckPermissionReply{
+  Effect effect = 1;
+}
+
+
+enum Effect{
+  UNKNOWN = 0;
+  GRANT = 1;
+  FORBIDDEN = 2;
+}
+
+message Permission{
+  string namespace = 1;
+  string resource = 2;
+  string action = 3;
+  string subject = 4;
+  Effect effect =5;
+  string tenant_id =6;
+}
+
+message UpdateSubjectPermissionRequest{
+  string subject = 1 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  repeated UpdateSubjectPermissionAcl acl = 2;
+}
+
+message UpdateSubjectPermissionAcl{
+  string namespace = 1 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  string resource = 2 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  string action = 3 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  Effect effect =5 [(google.api.field_behavior) = REQUIRED];
+  string tenant_id =6;
+}
+
+message UpdateSubjectPermissionResponse{
+  repeated Permission acl = 1;
+}
+
+message RemoveSubjectPermissionRequest{
+  optional string namespace = 1 ;
+  optional string  resource = 2 ;
+  optional string  action = 3 ;
+  string subject = 4[(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  repeated Effect effects =5;
+  optional string tenant_id =6;
+}
+message RemoveSubjectPermissionReply{
+
+}
+
+message AddSubjectPermissionRequest{
+  string namespace = 1 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  string resource = 2 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  string action = 3 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  string subject = 4[(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  Effect effect =5 [(google.api.field_behavior) = REQUIRED,(validate.rules).enum= {in:[1,2]}];
+  string tenant_id =6;
+}
+
+message AddSubjectPermissionResponse{
+
+}
+message ListSubjectPermissionRequest{
+  repeated string subjects=1;
+}
+
+message ListSubjectPermissionResponse{
+  repeated Permission acl = 1;
+  repeated PermissionDefGroup def_groups=2;
+}
+
+
+enum PermissionSide{
+  BOTH=0;
+  HOST_ONLY=1;
+  TENANT_ONLY=2;
+}
+
+message PermissionDefGroup{
+  string display_name=1;
+  PermissionSide side=2;
+  int32 priority=3;
+  repeated PermissionDef def=4;
+  google.protobuf.Struct extra=5;
+  string name=6;
+}
+
+message PermissionDef{
+  string display_name=1;
+  PermissionSide side=2;
+  google.protobuf.Struct extra=3;
+  string namespace=4;
+  string action=5;
+
+  bool granted=6;
+  string name=7;
+}
+message PermissionRequirement{
+  string namespace = 1 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  string resource = 2 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  string action = 3 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+}

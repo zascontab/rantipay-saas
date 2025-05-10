@@ -1,0 +1,11 @@
+docker-compose.yml
+docker-compose.*.yml
+
+# Develop tools
+.vscode/
+.idea/
+.run/
+*.swp
+
+**/*/.temp/
+**/*/node_modules

@@ -1,0 +1,25 @@
+syntax = "proto3";
+package sys.internal;
+
+option go_package = "github.com/go-saas/kit/sys/private/conf;conf";
+
+import "conf/conf.proto";
+import "blob/blob.proto";
+import "apisix/apisix.proto";
+import "google/protobuf/struct.proto";
+
+
+message Bootstrap {
+  conf.Data data = 2;
+  conf.Security security=3;
+  conf.Services services =4;
+  conf.Logging logging=6;
+  conf.Tracers tracing=7;
+  conf.AppConfig app=8;
+  conf.Dev dev=9;
+  SysConf sys=10;
+}
+
+message SysConf{
+  apisix.Config apisix=1;
+}

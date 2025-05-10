@@ -1,0 +1,12 @@
+[payment.manager]
+other = "Payment Management"
+
+[payment.subscription]
+other = "Subscription List"
+
+[permission.payment.subscription.group]
+other = "Subscription"
+[permission.payment.subscription.read]
+other = "Read Subscription"
+[permission.payment.subscription.write]
+other = "Write Subscription"

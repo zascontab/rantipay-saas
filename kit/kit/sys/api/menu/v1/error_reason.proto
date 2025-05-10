@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sys.api.menu.v1;
+import "errors/errors.proto";
+
+option go_package = "github.com/go-saas/kit/sys/api/menu/v1;v1";
+
+enum ErrorReason {
+
+  option (errors.default_code) = 500;
+
+  MENU_NAME_DUPLICATE = 0 [(errors.code) = 400];
+  MENU_PRESERVED =1 [(errors.code) = 403];
+}

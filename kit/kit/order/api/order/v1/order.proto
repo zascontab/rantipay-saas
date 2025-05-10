@@ -1,0 +1,248 @@
+syntax = "proto3";
+
+package order.api.order.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/field_mask.proto";
+import "google/api/field_behavior.proto";
+import "validate/validate.proto";
+import "query/operation.proto";
+import "lbs/address.proto";
+import "price/price.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "stripe/stripe.proto";
+
+option go_package = "github.com/go-saas/kit/order/api/order/v1;v1";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  security_definitions: {
+    security: {
+      key: "bearer"
+      value: {
+        type: TYPE_API_KEY
+        in: IN_HEADER
+        name: "Authorization"
+        description: "Authentication token, prefixed by Bearer: Bearer <token>"
+      }
+    }
+  }
+  security: {
+    security_requirement: {
+      key: "bearer"
+    }
+  }
+};
+
+service OrderService {
+  rpc ListOrder (ListOrderRequest) returns (ListOrderReply){
+    option (google.api.http) = {
+      get: "/v1/order",
+      additional_bindings:{
+        post:"/v1/order/list",
+        body:"*"
+      }
+    };
+  }
+  rpc GetOrder (GetOrderRequest) returns (Order){
+    option (google.api.http) = {
+      get: "/v1/order/{id}"
+    };
+  }
+  rpc CreateOrder (CreateOrderRequest) returns (Order){
+    option (google.api.http) = {
+      post: "/v1/order",
+      body: "*"
+    };
+  }
+
+  rpc UpdateOrder (UpdateOrderRequest) returns (Order){
+    option (google.api.http) = {
+      put: "/v1/order/{order.id}",
+      body: "*"
+      additional_bindings{
+        patch: "/v1/order/{order.id}",
+        body: "*"
+      }
+    };
+  }
+
+  rpc DeleteOrder (DeleteOrderRequest) returns (DeleteOrderReply){
+    option (google.api.http) = {
+      delete: "/v1/order/{id}"
+    };
+  }
+
+}
+
+
+service MyOrderService{
+  rpc ListMyOrder (ListOrderRequest) returns (ListOrderReply){
+    option (google.api.http) = {
+      get: "/v1/order/my",
+      additional_bindings:{
+        post:"/v1/order/my/list",
+        body:"*"
+      }
+    };
+  }
+
+  rpc GetMyOrder (GetOrderRequest) returns (Order){
+    option (google.api.http) = {
+      get: "/v1/order/my/{id}"
+    };
+
+  }
+
+  rpc RefundMyOrder (RefundMyOrderRequest) returns (Order){
+    option (google.api.http) = {
+      post: "/v1/order/my/{order_id}/refund"
+      body:"*"
+    };
+  }
+
+}
+
+
+message CreateOrderRequest {
+  string name =1 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateOrderRequest {
+  UpdateOrder order=1 [(validate.rules).message.required=true,(google.api.field_behavior) = REQUIRED];
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message UpdateOrder{
+  string id=1 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  string name=2;
+}
+
+
+message DeleteOrderRequest {
+  string id=1;
+}
+message DeleteOrderReply {
+  string id=1;
+  string name=2;
+}
+
+message GetOrderRequest {
+  string id=1 [(validate.rules).string.min_len=1,(google.api.field_behavior)=REQUIRED];
+}
+
+message OrderFilter{
+  query.operation.StringFilterOperation id=1;
+  query.operation.StringFilterOperation name =2;
+  query.operation.StringFilterOperation customer_id =10;
+}
+
+message ListOrderRequest {
+  int32 page_offset =1;
+  int32 page_size = 2;
+  string search = 3;
+  repeated string sort =4;
+  google.protobuf.FieldMask fields=5;
+  OrderFilter filter =6;
+
+  string after_page_token =10;
+  string before_page_token =11;
+}
+
+message ListOrderReply {
+  int32 total_size =1;
+  int32 filter_size =2;
+  repeated Order items=3;
+
+  optional string next_after_page_token=4;
+  optional string next_before_page_token=5;
+}
+
+message Order{
+  string id=1;
+
+  google.protobuf.Timestamp created_at =4;
+  google.protobuf.Timestamp updated_at =5;
+  string tenant_id=6;
+
+  string status=10;
+  string currency_code=11;
+
+  price.PricePb total_price=20;
+  price.PricePb total_price_incl_tax=21;
+  price.PricePb discount =22;
+
+  price.PricePb original_price=24;
+
+  price.PricePb paid_price=26;
+  google.protobuf.Timestamp paid_time=27;
+  google.protobuf.Timestamp pay_before=28;
+
+  string pay_provider=29;
+
+  lbs.Address shipping_addr =50;
+  lbs.Address billing_addr =51;
+
+  string customer_id=60;
+
+  repeated OrderItem items=100;
+
+  OrderPaymentProviderInfo payment_provider_info=200;
+  repeated OrderPaymentProvider payment_providers=201;
+}
+
+message OrderItem{
+  string id=1;
+  int64 qty=2;
+
+  string currency_code=3;
+
+  price.PricePb price=10;
+  price.PricePb price_tax=11;
+  price.PricePb price_incl_tax=12;
+
+  price.PricePb original_price=13;
+
+  price.PricePb row_total = 20;
+  price.PricePb row_total_tax = 21;
+  price.PricePb row_total_incl_tax=22;
+
+
+  price.PricePb row_discount=50;
+
+  OrderProduct product=100;
+  bool is_giveaway=101;
+
+  google.protobuf.Struct biz_payload=200;
+}
+
+message OrderPaymentProvider{
+  string provider=1;
+  string provider_key=2;
+}
+
+message OrderProduct{
+  string name=1;
+  string main_pic=2;
+  optional string id=3;
+  string version=4;
+  string type=5;
+  optional string sku_id=6;
+  string sku_title=7;
+  optional string price_id=8;
+}
+
+
+message RefundMyOrderRequest{
+  string order_id=1;
+}
+
+message OrderPaymentProviderInfo{
+    OrderPaymentStripeInfo stripe=1;
+}
+
+message OrderPaymentStripeInfo{
+  .stripe.PaymentIntent payment_intent=11;
+  .stripe.EphemeralKey ephemeral_key=2;
+}

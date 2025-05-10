@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package user.api.auth.v1;
+import "errors/errors.proto";
+
+option go_package = "github.com/go-saas/kit/user/api/auth/v1;v1";
+
+enum ErrorReason {
+
+  option (errors.default_code) = 500;
+
+  INVALID_CREDENTIALS = 0 [(errors.code) = 400];
+  INVALID_OPERATION = 1 [(errors.code) = 400];
+  USER_LOCKED = 2 [(errors.code) = 403];
+  EMAIL_NOT_CONFIRMED=3[(errors.code) = 403];
+  PHONE_NOT_CONFIRMED=4[(errors.code) = 403];
+
+  EMAIL_RECOVER_FAILED=5[(errors.code) = 403];
+  EMAIL_CONFIRM_FAILED=6[(errors.code) = 403];
+
+  PHONE_RECOVER_FAILED=7[(errors.code) = 403];
+  PHONE_CONFIRM_FAILED=8[(errors.code) = 403];
+
+  TWO_STEP_FAILED = 9[(errors.code) = 400];
+
+  CONFIRM_PASSWORD_MISMATCH= 10[(errors.code) = 400];
+  REMEMBER_TOKEN_NOT_FOUND = 11[(errors.code) = 403];
+  REMEMBER_TOKEN_USED = 14[(errors.code) = 403];
+
+
+  USER_DELETED=12 [(errors.code) = 403];
+
+  REFRESH_TOKEN_INVALID=13[(errors.code) = 401];
+
+  EMAIL_PASSWORDLESS_FAILED=20[(errors.code) = 403];
+  PHONE_PASSWORDLESS_FAILED=21[(errors.code) = 403];
+}

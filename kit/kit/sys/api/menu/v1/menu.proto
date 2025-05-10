@@ -1,0 +1,204 @@
+syntax = "proto3";
+
+package sys.api.menu.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "blob/blob.proto";
+import "google/api/field_behavior.proto";
+import "user/api/permission/v1/permission.proto";
+import "query/operation.proto";
+
+option go_package = "github.com/go-saas/kit/sys/api/menu/v1;v1";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "System Service";
+    version: "1.0";
+  };
+  security_definitions: {
+    security: {
+      key: "bearer"
+      value: {
+        type: TYPE_API_KEY
+        in: IN_HEADER
+        name: "Authorization"
+        description: "Authentication token, prefixed by Bearer: Bearer <token>"
+      }
+    }
+  }
+  security: {
+    security_requirement: {
+      key: "bearer"
+    }
+  }
+};
+
+service MenuService {
+  rpc ListMenu (ListMenuRequest) returns (ListMenuReply){
+    option (google.api.http) = {
+      get: "/v1/sys/menus",
+      additional_bindings:{
+        post:"/v1/sys/menu/list",
+        body:"*"
+      }
+    };
+  }
+  rpc GetMenu (GetMenuRequest) returns (Menu){
+    option (google.api.http) = {
+      get: "/v1/sys/menu/{id}"
+    };
+  }
+  rpc CreateMenu (CreateMenuRequest) returns (Menu){
+    option (google.api.http) = {
+      post: "/v1/sys/menu",
+      body: "*"
+    };
+  }
+  rpc UpdateMenu (UpdateMenuRequest) returns (Menu){
+    option (google.api.http) = {
+      put: "/v1/sys/menu/{menu.id}",
+      body: "*"
+      additional_bindings{
+        patch: "/v1/sys/menu/{menu.id}",
+        body: "*"
+      }
+    };
+  }
+  rpc DeleteMenu (DeleteMenuRequest) returns (DeleteMenuReply){
+    option (google.api.http) = {
+      delete: "/v1/sys/menu/{id}"
+    };
+  }
+
+  rpc GetAvailableMenus(GetAvailableMenusRequest)returns(GetAvailableMenusReply){
+    option (google.api.http) = {
+      get: "/v1/sys/menus/available",
+    };
+  }
+}
+
+message CreateMenuRequest {
+  string name =1 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+
+  string desc=5;
+  string component=6;
+  repeated .user.api.permission.v1.PermissionRequirement requirement=7;
+  //parent menu
+  string parent=8;
+  google.protobuf.Struct props=9;
+  string full_path=10;
+  int32 priority=11;
+  bool ignore_auth=12;
+  string icon=13;
+  string iframe=14;
+  string micro_app=15;
+  google.protobuf.Struct meta=16;
+  string title=17;
+  string path=18;
+  string redirect=19;
+  string micro_app_name=20;
+  string micro_app_base_route=21;
+  string micro_app_dev=22;
+  bool hide_in_menu=23;
+}
+
+message UpdateMenuRequest {
+  UpdateMenu menu=1 [(validate.rules).message.required=true,(google.api.field_behavior) = REQUIRED];
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message UpdateMenu{
+  string id=1 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  string name=2 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+
+  string desc=5;
+  string component=6;
+  repeated .user.api.permission.v1.PermissionRequirement requirement=7;
+  //parent menu
+  string parent=8;
+  google.protobuf.Struct props=9;
+  string full_path=10;
+  int32 priority=11;
+  bool ignore_auth=12;
+  string icon=13;
+  string iframe=14;
+  string micro_app=15;
+  google.protobuf.Struct meta=16;
+  string title=17;
+  string path=18;
+  string redirect=19;
+  string micro_app_name=20;
+  string micro_app_base_route=21;
+  string micro_app_dev=22;
+  bool hide_in_menu=23;
+}
+
+
+message DeleteMenuRequest {
+  string id=1;
+}
+message DeleteMenuReply {
+  string id=1;
+  string name=2;
+}
+
+message GetMenuRequest {
+  string id=1 [(validate.rules).string.min_len=1,(google.api.field_behavior)=REQUIRED];
+}
+
+message MenuFilter{
+  query.operation.StringFilterOperation id=1;
+  query.operation.StringFilterOperation name =2;
+  query.operation.StringFilterOperation parent=3;
+}
+message ListMenuRequest {
+  int32 page_offset =1;
+  int32 page_size = 2;
+  string search = 3;
+  repeated string sort =4;
+  google.protobuf.FieldMask fields=5;
+  MenuFilter filter =6;
+}
+message ListMenuReply {
+  int32 total_size =1;
+  int32 filter_size =2;
+  repeated Menu items=3;
+}
+
+message Menu{
+  string id=1;
+  string name=2;
+  optional google.protobuf.Timestamp created_at =4;
+  string desc=5;
+  string component=6;
+  repeated .user.api.permission.v1.PermissionRequirement requirement=7;
+  //parent menu
+  string parent=8;
+  google.protobuf.Struct props=9;
+  string full_path=10;
+  int32 priority=11;
+  bool ignore_auth=12;
+  string icon=13;
+  string iframe=14;
+  string micro_app=15;
+  google.protobuf.Struct meta=16;
+  string title=17;
+  string path=18;
+  string redirect=19;
+  string micro_app_name=20;
+  string micro_app_base_route=21;
+  string micro_app_dev=22;
+  bool hide_in_menu=23;
+}
+
+message GetAvailableMenusRequest{
+
+}
+message GetAvailableMenusReply{
+  repeated Menu items=3;
+}

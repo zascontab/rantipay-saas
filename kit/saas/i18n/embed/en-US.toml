@@ -1,0 +1,36 @@
+[TenantNotFound]
+other = "Tenant Not Found"
+[DuplicateTenantName]
+other = "Tenant Name Used"
+[TenantForbidden]
+other = "Tenant Forbidden"
+
+[AdminUsernameInvalid]
+other = "Administrator Username Invalid"
+[AdminEmailInvalid]
+other = "Administrator Email Invalid"
+
+[permission.saas.tenant.group]
+other = "Tenant"
+[permission.saas.tenant.read]
+other = "Read Tenant"
+[permission.saas.tenant.create]
+other = "Create Tenant"
+[permission.saas.tenant.update]
+other = "Update Tenant"
+[permission.saas.tenant.delete]
+other = "Delete Tenant"
+
+[permission.saas.plan.group]
+other = "Plan"
+[permission.saas.plan.read]
+other = "Read Plan"
+[permission.saas.plan.create]
+other = "Create Plan"
+[permission.saas.plan.update]
+other = "Update Plan"
+[permission.saas.plan.delete]
+other = "Delete Plan"
+
+[saas.plan.management]
+other = "Plan Management"

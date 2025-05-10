@@ -1,0 +1,158 @@
+syntax = "proto3";
+
+package product.api.price.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/field_mask.proto";
+import "google/api/field_behavior.proto";
+import "validate/validate.proto";
+import "query/operation.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "price/price.proto";
+
+option go_package = "github.com/go-saas/kit/product/api/price/v1;v1";
+
+message Price{
+  string id=1;
+
+  google.protobuf.Timestamp created_at =4;
+  google.protobuf.Timestamp updated_at =5;
+  string tenant_id=6;
+
+  // product/product_sku
+  string owner_type=50;
+  string owner_id=51;
+  string product_id=52;
+
+  string currency_code=99;
+  .price.PricePb default=100;
+  .price.PricePb discounted=101;
+
+  string discount_text=102;
+  bool deny_more_discounts=103;
+
+  string billing_scheme=104;
+
+  repeated PriceCurrencyOption currency_options=300;
+
+  PriceRecurring recurring=301;
+
+  repeated PriceTier tiers=302;
+  string tiers_mode=310;
+
+  PriceTransformQuantity transform_quantity=311;
+  string type=312;
+
+
+  optional string stripe_price_id=1000;
+}
+
+message PriceCurrencyOption{
+  string currency_code=1;
+
+  .price.PricePb default=100;
+  .price.PricePb discounted=101;
+  string discount_text=102;
+  bool deny_more_discounts=103;
+
+  repeated  PriceCurrencyOptionTier tiers=200;
+}
+
+message PriceCurrencyOptionParams{
+  string currency_code=1;
+
+  string default_amount_decimal=100;
+  optional string discounted_amount_decimal=101;
+  string discount_text=102;
+  bool deny_more_discounts=103;
+
+  repeated PriceCurrencyOptionTierParams tiers=200;
+}
+
+
+message PriceCurrencyOptionTier{
+  .price.PricePb flat=1;
+  .price.PricePb unit=2;
+  int64 up_to=3;
+}
+
+message PriceCurrencyOptionTierParams{
+  string flat_amount_decimal=1;
+  string unit_amount_decimal=2;
+  int64 up_to=3;
+}
+
+
+message PriceRecurring{
+  string interval=1 [(validate.rules).string={in:["day","week","month","year"]},(google.api.field_behavior) = REQUIRED];
+  int64  interval_count=2 [(validate.rules).int64={gt:0}];
+  int64 trial_period_days=3[(validate.rules).int64={gte:0}];
+  string aggregate_usage=4 [(validate.rules).string={in:["last_during_period","last_ever","max","sum",""]}];
+  string usage_type=5 [(validate.rules).string={in:["licensed","metered",""]}];
+}
+
+message PriceTier{
+  .price.PricePb flat=1;
+  .price.PricePb unit=2;
+  int64 up_to=3[(validate.rules).int64={gt:0}];
+}
+
+message PriceTierParams{
+  string flat_amount_decimal=1;
+  string unit_amount_decimal=2;
+  int64 up_to=3[(validate.rules).int64={gt:0}];
+}
+
+message PriceTransformQuantity{
+  int64 divide_by=1;
+  string round=2 [(validate.rules).string={in:["up","down"]},(google.api.field_behavior) = REQUIRED];
+}
+
+message PriceParams{
+
+  string id=1;
+
+  string currency_code=99;
+
+  string default_amount_decimal=100;
+  optional string discounted_amount_decimal=101;
+
+  string discount_text=102;
+  bool deny_more_discounts=103;
+
+  string billing_scheme=104 [(validate.rules).string={in:["per_unit","tiered"]},(google.api.field_behavior) = REQUIRED];
+
+  repeated PriceCurrencyOptionParams currency_options=300;
+
+  PriceRecurring recurring=301;
+
+  repeated PriceTierParams tiers=302;
+  string tiers_mode=310 [(validate.rules).string={in:["graduated","volume",""]}];
+
+  PriceTransformQuantity transform_quantity=311;
+  string type=312 [(validate.rules).string={in:["one_time","recurring"]},(google.api.field_behavior) = REQUIRED];
+}
+
+
+message UpdatePriceRequest{
+  PriceParams price=2 [(validate.rules).message.required=true,(google.api.field_behavior) = REQUIRED];
+  google.protobuf.FieldMask update_mask = 3;
+}
+
+
+
+message ListPriceRequest{
+  int32 page_offset =1;
+  int32 page_size = 2;
+  string search = 3;
+  repeated string sort =4;
+  google.protobuf.FieldMask fields=5;
+  PriceFilter filter =6;
+}
+
+message PriceFilter{
+  .query.operation.StringFilterOperation owner_type=50;
+  .query.operation.StringFilterOperation owner_id=51;
+}

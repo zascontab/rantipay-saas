@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package apisix;
+
+import "google/protobuf/struct.proto";
+
+option go_package = "github.com/go-saas/kit/pkg/apisix;apisix";
+
+message Node{
+  string host=1;
+  uint64  port=2;
+  int64 weight=3;
+}
+
+message Upstream{
+  repeated Node nodes=1;
+  string type=2;
+  string scheme=3;
+  string name=4;
+}
+
+message Config{
+  string endpoint=1;
+  string api_key=2;
+  repeated Module modules=3;
+}
+
+message Module{
+  // https://apisix.apache.org/docs/apisix/admin-api/#route
+  map<string,google.protobuf.Struct> routes=10;
+  // https://apisix.apache.org/docs/apisix/admin-api/#global-rule
+  map<string,google.protobuf.Struct> global_rules=11;
+  // https://apisix.apache.org/docs/apisix/admin-api/#upstream
+  map<string,google.protobuf.Struct> upstreams=12;
+  // https://apisix.apache.org/docs/apisix/admin-api/#stream-route
+  map<string,google.protobuf.Struct> stream_routes=13;
+}

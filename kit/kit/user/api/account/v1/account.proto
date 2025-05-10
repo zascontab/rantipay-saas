@@ -1,0 +1,193 @@
+syntax = "proto3";
+
+package user.api.account.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/field_mask.proto";
+
+import "user/api/role/v1/role.proto";
+import "user/api/user/v1/user.proto";
+import "saas/api/tenant/v1/tenant.proto";
+import "blob/blob.proto";
+import "query/operation.proto";
+import "data/data.proto";
+import "lbs/address.proto";
+import "validate/validate.proto";
+
+option go_package = "github.com/go-saas/kit/user/api/account/v1;v1";
+
+service Account{
+  rpc GetProfile(GetProfileRequest)returns(GetProfileResponse){
+    option (google.api.http) = {
+      get: "/v1/account/profile"
+    };
+  }
+  //UpdateProfile
+  //Avatar: POST form file /v1/account/avatar
+  rpc UpdateProfile(UpdateProfileRequest)returns(UpdateProfileResponse){
+    option (google.api.http) = {
+      put: "/v1/account/profile",
+      body:"*"
+    };
+  }
+  rpc GetSettings(GetSettingsRequest) returns (GetSettingsResponse){
+    option (google.api.http) = {
+      get: "/v1/account/settings"
+    };
+  }
+  rpc UpdateSettings(UpdateSettingsRequest) returns (UpdateSettingsResponse){
+    option (google.api.http) = {
+      put: "/v1/account/settings",
+      body:"*"
+    };
+  }
+  rpc GetAddresses(GetAddressesRequest) returns(GetAddressesReply){
+    option (google.api.http) = {
+      get: "/v1/account/addresses"
+    };
+  }
+  rpc CreateAddresses(CreateAddressesRequest) returns(CreateAddressReply){
+    option (google.api.http) = {
+      post: "/v1/account/addresses",
+      body:"*"
+    };
+  }
+  rpc UpdateAddresses(UpdateAddressesRequest) returns(UpdateAddressesReply){
+    option (google.api.http) = {
+      put: "/v1/account/address/{address.id}",
+      body:"*"
+    };
+  }
+  rpc DeleteAddresses(DeleteAddressRequest) returns(DeleteAddressesReply){
+    option (google.api.http) = {
+      delete: "/v1/account/addresses",
+    };
+  }
+}
+
+message GetProfileRequest{
+
+}
+message GetProfileResponse{
+  string  id=1;
+  optional string username =2;
+  optional string name=3;
+  optional string phone =4;
+  optional string email=5;
+  optional google.protobuf.Timestamp birthday=6;
+  //
+  .user.api.user.v1.Gender gender=7;
+  repeated .user.api.role.v1.Role roles=8;
+  // user available tenants
+  repeated UserTenant tenants=9;
+  blob.BlobFile avatar=10;
+  UserTenant current_tenant=11;
+}
+
+message UpdateProfileRequest{
+  optional string username =2;
+  optional string name=3;
+  .user.api.user.v1.Gender gender=7;
+}
+
+message UpdateProfileResponse{
+
+}
+message GetSettingsRequest{
+  google.protobuf.FieldMask fields=5;
+  SettingsFilter filter=6;
+}
+
+message SettingsFilter{
+  query.operation.StringFilterOperation key=1;
+}
+
+message GetSettingsResponse{
+  repeated Settings settings=1;
+}
+
+message UpdateSettingsRequest{
+  repeated UpdateSettings settings=1;
+}
+
+message UpdateSettingsResponse{
+  repeated Settings settings=1;
+}
+
+message GetAddressesRequest{
+
+}
+
+message GetAddressesReply{
+  repeated UserAddress addresses=1;
+}
+
+
+message UserAddress{
+  string id=1;
+
+  string phone=3;
+  string usage=4;
+  bool prefer=5;
+  lbs.Address address=6;
+  google.protobuf.Struct metadata=7;
+}
+
+
+message CreateAddressesRequest{
+  string phone=3;
+  string usage=4;
+  bool prefer=5;
+  lbs.Address address=6 [(validate.rules).message.required=true,(google.api.field_behavior) = REQUIRED];
+  google.protobuf.Struct metadata=7;
+}
+
+message CreateAddressReply{
+
+}
+
+message UpdateAddressesRequest{
+  UpdateAddress address=2 [(validate.rules).message.required=true,(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateAddress{
+  string id=1 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  string phone=3;
+  string usage=4;
+  bool prefer=5;
+  lbs.Address address=6 [(validate.rules).message.required=true,(google.api.field_behavior) = REQUIRED];
+  google.protobuf.Struct metadata=7;
+}
+
+message UpdateAddressesReply{
+
+}
+
+message DeleteAddressRequest{
+  string id=1  [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+}
+message DeleteAddressesReply{
+
+}
+
+message UserTenant{
+  string user_id=1;
+  string tenant_id=2;
+  .saas.api.tenant.v1.TenantInfo tenant=3;
+  bool is_host = 4;
+}
+
+message Settings{
+  string key=1;
+  data.DynamicValue value=2;
+}
+
+message UpdateSettings{
+  string key=1;
+  data.DynamicValue value=2;
+  bool reset=3;
+}

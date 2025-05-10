@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package product.api.product.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/field_mask.proto";
+import "google/api/field_behavior.proto";
+import "validate/validate.proto";
+import "query/operation.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "product/api/product/v1/common.proto";
+import "product/api/price/v1/price.proto";
+
+option go_package = "github.com/go-saas/kit/product/api/product/v1;v1";
+
+
+message CreateProductSku{
+  string id=1;
+  string title=2;
+
+  ProductMedia main_pic=13;
+  repeated ProductMedia medias=14;
+
+  repeated .product.api.price.v1.PriceParams prices=26;
+
+  string barcode=19;
+
+  repeated Stock stock=62;
+}
+
+message ProductSku{
+  string id=1;
+
+  google.protobuf.Timestamp created_at =4;
+  google.protobuf.Timestamp updated_at =5;
+  string tenant_id=6;
+  string version=7;
+
+  string title =10 ;
+
+  ProductMedia main_pic=13;
+
+  repeated ProductMedia medias=14;
+
+  string barcode=19;
+  google.protobuf.Timestamp saleable_from=23;
+  google.protobuf.Timestamp saleable_to=24;
+
+  repeated Keyword keywords=25;
+
+  repeated .product.api.price.v1.Price prices=26;
+
+
+  repeated Stock stocks=62;
+
+
+}

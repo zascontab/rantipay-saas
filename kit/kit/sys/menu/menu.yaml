@@ -1,0 +1,185 @@
+menus:
+  - name: "admin"
+    path: "/admin"
+    component: "LAYOUT"
+    is_preserved: true
+    redirect: '/admin/users'
+    title: "admin.title"
+    icon: "BarsOutlined"
+    priority: 99
+    requirement:
+      - namespace: "user.admin.user"
+        resource: "*"
+        action: "read"
+    children:
+      - name: "admin.user"
+        path: '/admin/users'
+        icon: "User"
+        is_preserved: true
+        component: "/Admin/User"
+        title: "admin.user.management"
+        requirement:
+          - namespace: "user.admin.user"
+            resource: "*"
+            action: "read"
+  - name: "sys"
+    path: "/sys"
+    component: "LAYOUT"
+    is_preserved: true
+    redirect: '/sys/users'
+    title: "sys.title"
+    icon: "BarsOutlined"
+    priority: 100
+    children:
+      - name: "user"
+        path: '/sys/users'
+        icon: "User"
+        is_preserved: true
+        component: "/Sys/User"
+        title: "sys.user.management"
+        requirement:
+          - namespace: "user.user"
+            resource: "*"
+            action: "read"
+      - name: "role"
+        path: "/sys/roles"
+        icon: "TeamOutlined"
+        is_preserved: true
+        component: "/Sys/Role"
+        meta:
+        title: "sys.role.management"
+        requirement:
+          - namespace: "user.role"
+            resource: "*"
+            action: "read"
+      - name: "menu"
+        path: "/sys/menus"
+        is_preserved: true
+        component: "/System/Menu"
+        icon: "MenuOutlined"
+        title: "sys.menu.management"
+        requirement:
+          - namespace: "sys.menu"
+            resource: "*"
+            action: "read"
+
+  - name: "saas"
+    path: "/saas"
+    component: "LAYOUT"
+    redirect: "/saas/tenants"
+    title: "saas.title"
+    icon: "ShopOutlined"
+    priority: 101
+    is_preserved: true
+    requirement:
+      - namespace: "saas.tenant"
+        resource: "*"
+        action: "read"
+    children:
+      - name: "tenant"
+        path: "/saas/tenants"
+        component: "/Saas/Tenant"
+        is_preserved: true
+        title: "saas.tenant.management"
+        requirement:
+          - namespace: "saas.tenant"
+            resource: "*"
+            action: "read"
+      - name: "plans"
+        path: "/saas/plans"
+        component: "/Saas/Plan"
+        is_preserved: true
+        title: "saas.plan.management"
+        requirement:
+          - namespace: "saas.plan"
+            resource: "*"
+            action: "read"
+
+  - name: "oidc"
+    path: "/oidc"
+    component: "LAYOUT"
+    redirect: "/oidc/clients"
+    title: "oidc.title"
+    icon: "ShopOutlined"
+    priority: 900
+    is_preserved: true
+    requirement:
+      - namespace: "oidc.client"
+        resource: "*"
+        action: "read"
+    children:
+      - name: "oidc.client"
+        path: "/oidc/clients"
+        is_preserved: true
+        title: "oidc.client.management"
+        requirement:
+          - namespace: "oidc.client"
+            resource: "*"
+            action: "read"
+
+  - name: "dev"
+    path: "/dev"
+    component: "LAYOUT"
+    redirect: "/dev/jaeger"
+    title: "dev.title"
+    icon: "ToolOutlined"
+    meta:
+    priority: 1000
+    children:
+      - name: "docs"
+        icon: "ApiOutlined"
+        path: "/dev/docs"
+        component: "IFRAME"
+        iframe: "/swagger"
+        title: "dev.docs"
+        is_preserved: true
+        requirement:
+          - namespace: "dev.docs"
+            resource: "*"
+            action: "*"
+      - name: "tracing"
+        icon: "ApiOutlined"
+        path: "/dev/jaeger"
+        component: "IFRAME"
+        is_preserved: true
+        iframe: "/jaeger"
+        title: "dev.jaeger"
+        requirement:
+          - namespace: "dev.jaeger"
+            resource: "*"
+            action: "*"
+      - name: "jobs"
+        icon: "CloudSyncOutlined"
+        path: "/dev/jobs"
+        component: "IFRAME"
+        iframe: "/v1/sys/asynqmon/"
+        is_preserved: true
+        title: "dev.jobs"
+        requirement:
+          - namespace: "dev.jobs"
+            resource: "*"
+            action: "*"
+      - name: "events-kafka"
+        icon: "CloudServerOutlined"
+        path: "/dev/events-kafka"
+        component: "IFRAME"
+        iframe: "/kafka-ui/"
+        is_preserved: true
+        title: "dev.events.kafka"
+        requirement:
+          - namespace: "dev.events.kafka"
+            resource: "*"
+            action: "*"
+      - name: "dtm"
+        icon: "CloudServerOutlined"
+        path: "/dev/dtm"
+        component: "IFRAME"
+        iframe: "/dtm-ui"
+        is_preserved: true
+        title: "dev.dtm"
+        requirement:
+          - namespace: "dev.dtm"
+            resource: "*"
+            action: "*"
+
+

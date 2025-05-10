@@ -1,0 +1,23 @@
+FROM golang:1.20 as builder
+
+WORKDIR /app
+COPY . .
+
+# Compilar el binario
+RUN ls -la &&     ls -la user &&     ls -la user/cmd &&     cd user && go build -o user ./cmd/user
+
+# Etapa final
+FROM debian:stable-slim
+
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY --from=builder /app/user/user /app/user
+
+# Verificar si existen los directorios antes de copiarlos
+RUN mkdir -p /app/configs /app/i18n
+
+# No copiamos configs ni i18n por ahora, los montaremos como volúmenes
+
+EXPOSE 8000 9000
+ENTRYPOINT ["/app/user", "-conf", "/data/conf/user.yaml"]

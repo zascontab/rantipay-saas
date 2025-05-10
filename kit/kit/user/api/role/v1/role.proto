@@ -1,0 +1,161 @@
+syntax = "proto3";
+
+package user.api.role.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+import "user/api/permission/v1/permission.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+import "query/operation.proto";
+
+option go_package = "github.com/go-saas/kit/user/api/role/v1;v1";
+
+service RoleService{
+  // authz: user.role,*,list
+  rpc ListRoles(ListRolesRequest)returns(ListRolesResponse){
+    option (google.api.http) = {
+      get: "/v1/roles"
+      additional_bindings:{
+        post: "/v1/role/list"
+        body: "*"
+      }
+    };
+  }
+  // authz: user.role,id,get
+  rpc GetRole (GetRoleRequest) returns (Role){
+    option (google.api.http) = {
+      get: "/v1/role/{id}"
+    };
+  }
+  // authz: user.role,*,create
+  rpc CreateRole(CreateRoleRequest) returns(Role){
+    option (google.api.http) = {
+      post: "/v1/role"
+      body:"*"
+    };
+  }
+  // authz: user.role,id,update
+  rpc UpdateRole(UpdateRoleRequest) returns(Role){
+    option (google.api.http) = {
+      put: "/v1/role/{role.id}"
+      body: "*"
+      additional_bindings: [
+        {
+          patch: "/v1/role/{role.id}"
+          body: "*"
+        }
+      ]
+    };
+  }
+  // authz: user.role,id,delete
+  rpc DeleteRole(DeleteRoleRequest) returns(DeleteRoleResponse){
+    option (google.api.http) = {
+      delete: "/v1/role/{id}"
+    };
+  }
+
+  rpc GetRolePermission(GetRolePermissionRequest) returns(GetRolePermissionResponse){
+    option (google.api.http) = {
+      get: "/v1/role/{id}/permission"
+    };
+  }
+
+  rpc UpdateRolePermission(UpdateRolePermissionRequest) returns(UpdateRolePermissionResponse){
+    option (google.api.http) = {
+      put: "/v1/role/{id}/permission"
+      body: "*"
+    };
+  }
+
+}
+
+message RoleFilter{
+  query.operation.StringFilterOperation id=1;
+  query.operation.StringFilterOperation name =2;
+}
+
+message ListRolesRequest{
+  int32 page_offset =1;
+  int32 page_size = 2;
+  string search = 3;
+  repeated string sort =4;
+  google.protobuf.FieldMask fields=5;
+  RoleFilter filter =6;
+}
+
+message ListRolesResponse{
+  int32 total_size =1;
+  int32 filter_size =2;
+
+  repeated Role items = 3;
+
+}
+
+message Role{
+  string id=1;
+  string name =2;
+  bool is_preserved=3;
+
+  repeated .user.api.permission.v1.Permission acl = 4;
+  repeated .user.api.permission.v1.PermissionDefGroup def_groups=5;
+
+}
+
+message GetRoleRequest{
+  // id or name should be provided
+  string  id=1;
+  // id or name should be provided
+  string name =2;
+}
+
+message CreateRoleRequest{
+  string name =2 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateRoleRequest{
+  UpdateRole role=2 [(validate.rules).message.required=true,(google.api.field_behavior) = REQUIRED];
+  google.protobuf.FieldMask update_mask = 3;
+}
+
+message UpdateRole{
+  string id=1 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  string name =2 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  repeated UpdateRolePermissionAcl acl =3;
+}
+
+message DeleteRoleRequest{
+  string id =1 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+}
+message DeleteRoleResponse{
+
+}
+
+message GetRolePermissionRequest{
+  string id =1 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+}
+
+message GetRolePermissionResponse{
+  repeated .user.api.permission.v1.Permission acl = 1;
+  repeated .user.api.permission.v1.PermissionDefGroup def_groups=2;
+}
+
+message UpdateRolePermissionRequest{
+  string id =1 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];;
+  repeated UpdateRolePermissionAcl acl =2;
+}
+
+message UpdateRolePermissionAcl{
+  string namespace = 1 ;
+  string resource = 2;
+  string action = 3;
+  .user.api.permission.v1.Effect effect =5;
+}
+
+message UpdateRolePermissionResponse{
+
+}
+
+

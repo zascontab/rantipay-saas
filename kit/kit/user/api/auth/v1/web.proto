@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package user.api.auth.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/struct.proto";
+import "validate/validate.proto";
+import "user/api/auth/v1/auth.proto";
+
+option go_package = "github.com/go-saas/kit/user/api/auth/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.auth";
+
+//Preserved proto for generate api docs
+service AuthWeb {
+
+  rpc GetWebLogin(GetLoginRequest) returns(GetLoginResponse){
+    option (google.api.http) = {
+      get: "/v1/auth/web/login",
+    };
+  }
+
+  rpc WebLogin(WebLoginAuthRequest) returns (WebLoginAuthReply){
+    option (google.api.http) = {
+      post: "/v1/auth/web/login",
+      body: "*",
+    };
+  }
+
+  rpc GetWebLogout(GetLogoutRequest)returns(GetLogoutResponse){
+    option (google.api.http) = {
+      get: "/v1/auth/web/logout",
+    };
+  }
+
+  rpc WebLogout(LogoutRequest)returns(LogoutResponse){
+    option (google.api.http) = {
+      post: "/v1/auth/web/logout",
+      body: "*",
+    };
+  }
+
+  rpc GetConsent(GetConsentRequest)returns(GetConsentResponse){
+    option (google.api.http) = {
+      get: "/v1/auth/web/consent",
+    };
+  }
+
+  rpc GrantConsent(GrantConsentRequest)returns(GrantConsentResponse){
+    option (google.api.http) = {
+      post: "/v1/auth/web/consent",
+      body: "*",
+    };
+  }
+}
+
+message GetLogoutRequest{
+  string logout_challenge=1;
+}
+
+message GetLogoutResponse{
+  string challenge=1;
+}
+
+message GetConsentRequest{
+  string consent_challenge=1;
+}
+
+message GetConsentResponse{
+  string challenge=1 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+  repeated string requested_scope=2;
+  string user_id=3;
+  OAuthClient client=4;
+  string redirect=10;
+}
+
+message GrantConsentRequest{
+  string challenge=1;
+  //user granted scope
+  repeated string grant_scope=2;
+  bool reject=5;
+}
+message GrantConsentResponse{
+  string redirect=10;
+}
+
+
+message OAuthClient{
+  optional string client_id=5;
+  optional string client_name=6;
+  optional string client_uri=9;
+  repeated string contacts=10;
+  optional string logo_uri=17;
+  optional google.protobuf.Struct metadata=18;
+  optional string owner=19;
+  optional string policy_uri=20;
+}

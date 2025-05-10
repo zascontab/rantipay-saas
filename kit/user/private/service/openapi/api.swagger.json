@@ -1,0 +1,5624 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "User Service",
+    "version": "1.0"
+  },
+  "tags": [
+    {
+      "name": "UserService"
+    },
+    {
+      "name": "UserInternalService"
+    },
+    {
+      "name": "MsgService"
+    },
+    {
+      "name": "EventService"
+    },
+    {
+      "name": "PermissionService"
+    },
+    {
+      "name": "RoleService"
+    },
+    {
+      "name": "Account"
+    },
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "WeChatAuthService"
+    },
+    {
+      "name": "AuthWeb"
+    },
+    {
+      "name": "PermissionInternalService"
+    },
+    {
+      "name": "UserAdminService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/account/address/{address.id}": {
+      "put": {
+        "operationId": "Account_UpdateAddresses",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateAddressesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "address.id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "type": "object",
+                  "properties": {
+                    "phone": {
+                      "type": "string"
+                    },
+                    "usage": {
+                      "type": "string"
+                    },
+                    "prefer": {
+                      "type": "boolean"
+                    },
+                    "address": {
+                      "$ref": "#/definitions/lbsAddress"
+                    },
+                    "metadata": {
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              "required": [
+                "address"
+              ]
+            }
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/v1/account/addresses": {
+      "get": {
+        "operationId": "Account_GetAddresses",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAddressesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Account"
+        ]
+      },
+      "delete": {
+        "operationId": "Account_DeleteAddresses",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteAddressesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      },
+      "post": {
+        "operationId": "Account_CreateAddresses",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateAddressReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateAddressesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/v1/account/profile": {
+      "get": {
+        "operationId": "Account_GetProfile",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetProfileResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Account"
+        ]
+      },
+      "put": {
+        "summary": "UpdateProfile\r\nAvatar: POST form file /v1/account/avatar",
+        "operationId": "Account_UpdateProfile",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateProfileResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateProfileRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/v1/account/settings": {
+      "get": {
+        "operationId": "Account_GetSettings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetSettingsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.key.$eq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.key.$neq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.key.$contains",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.key.$starts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.key.$nstarts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.key.$ends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.key.$nends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.key.$in",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.key.$nin",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.key.$null",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.key.$nnull",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.key.$empty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.key.$nempty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.key.$like",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      },
+      "put": {
+        "operationId": "Account_UpdateSettings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateSettingsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateSettingsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/v1/auth/action/forget": {
+      "post": {
+        "operationId": "Auth_SendForgetPasswordToken",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ForgetPasswordTokenReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ForgetPasswordTokenRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/action/passwordless": {
+      "post": {
+        "operationId": "Auth_SendPasswordlessToken",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1PasswordlessTokenAuthReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1PasswordlessTokenAuthRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/csrf": {
+      "get": {
+        "operationId": "Auth_GetCsrfToken",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCsrfTokenResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/login": {
+      "get": {
+        "operationId": "Auth_GetLogin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetLoginResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "redirect",
+            "description": "redirect url",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "loginChallenge",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      },
+      "post": {
+        "operationId": "Auth_Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LoginAuthReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1LoginAuthRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/login/passwordless": {
+      "post": {
+        "operationId": "Auth_LoginPasswordless",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LoginPasswordlessReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1LoginPasswordlessRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/password/change": {
+      "post": {
+        "operationId": "Auth_ChangePasswordByPre",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ChangePasswordByPreReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ChangePasswordByPreRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/password/forget": {
+      "post": {
+        "summary": "ForgetPassword\r\nverify forget password token",
+        "operationId": "Auth_ForgetPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ForgetPasswordReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ForgetPasswordRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/password/forget/change": {
+      "post": {
+        "operationId": "Auth_ChangePasswordByForget",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ChangePasswordByForgetReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ChangePasswordByForgetRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/password/validate": {
+      "post": {
+        "summary": "ValidatePassword\r\nserver validation for password strength",
+        "operationId": "Auth_ValidatePassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ValidatePasswordReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ValidatePasswordRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/refresh": {
+      "post": {
+        "operationId": "Auth_Refresh",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RefreshTokenAuthReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RefreshTokenAuthRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/register": {
+      "post": {
+        "operationId": "Auth_Register",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RegisterAuthReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RegisterAuthRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/token": {
+      "post": {
+        "operationId": "Auth_Token",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1TokenReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1TokenRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/web/consent": {
+      "get": {
+        "operationId": "AuthWeb_GetConsent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetConsentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "consentChallenge",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "AuthWeb"
+        ]
+      },
+      "post": {
+        "operationId": "AuthWeb_GrantConsent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GrantConsentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GrantConsentRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthWeb"
+        ]
+      }
+    },
+    "/v1/auth/web/login": {
+      "get": {
+        "operationId": "AuthWeb_GetWebLogin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetLoginResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "redirect",
+            "description": "redirect url",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "loginChallenge",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "AuthWeb"
+        ]
+      },
+      "post": {
+        "operationId": "AuthWeb_WebLogin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1WebLoginAuthReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1WebLoginAuthRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthWeb"
+        ]
+      }
+    },
+    "/v1/auth/web/logout": {
+      "get": {
+        "operationId": "AuthWeb_GetWebLogout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetLogoutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "logoutChallenge",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "AuthWeb"
+        ]
+      },
+      "post": {
+        "operationId": "AuthWeb_WebLogout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LogoutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1LogoutRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthWeb"
+        ]
+      }
+    },
+    "/v1/auth/wechat/mini/code": {
+      "post": {
+        "operationId": "WeChatAuthService_MiniProgramCode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1WeChatLoginReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1WechatMiniProgramCodeReq"
+            }
+          }
+        ],
+        "tags": [
+          "WeChatAuthService"
+        ]
+      }
+    },
+    "/v1/auth/wechat/mini/phone-code": {
+      "post": {
+        "operationId": "WeChatAuthService_MiniProgramPhoneCode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1WeChatLoginReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1WechatMiniProgramPhoneCodeReq"
+            }
+          }
+        ],
+        "tags": [
+          "WeChatAuthService"
+        ]
+      }
+    },
+    "/v1/permission/check": {
+      "post": {
+        "operationId": "PermissionService_CheckCurrent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CheckPermissionReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CheckPermissionRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PermissionService"
+        ]
+      }
+    },
+    "/v1/permission/current": {
+      "get": {
+        "summary": "Get current permission",
+        "operationId": "PermissionService_GetCurrent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCurrentPermissionReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "PermissionService"
+        ]
+      }
+    },
+    "/v1/role": {
+      "post": {
+        "summary": "authz: user.role,*,create",
+        "operationId": "RoleService_CreateRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1Role"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateRoleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      }
+    },
+    "/v1/role/list": {
+      "post": {
+        "summary": "authz: user.role,*,list",
+        "operationId": "RoleService_ListRoles2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListRolesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListRolesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      }
+    },
+    "/v1/role/{id}": {
+      "get": {
+        "summary": "authz: user.role,id,get",
+        "operationId": "RoleService_GetRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1Role"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "id or name should be provided",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "id or name should be provided",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      },
+      "delete": {
+        "summary": "authz: user.role,id,delete",
+        "operationId": "RoleService_DeleteRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteRoleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      }
+    },
+    "/v1/role/{id}/permission": {
+      "get": {
+        "operationId": "RoleService_GetRolePermission",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetRolePermissionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      },
+      "put": {
+        "operationId": "RoleService_UpdateRolePermission",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateRolePermissionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "acl": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "$ref": "#/definitions/v1UpdateRolePermissionAcl"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      }
+    },
+    "/v1/role/{role.id}": {
+      "put": {
+        "summary": "authz: user.role,id,update",
+        "operationId": "RoleService_UpdateRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1Role"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "role.id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "acl": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "$ref": "#/definitions/v1UpdateRolePermissionAcl"
+                      }
+                    }
+                  }
+                },
+                "updateMask": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name"
+              ]
+            }
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      },
+      "patch": {
+        "summary": "authz: user.role,id,update",
+        "operationId": "RoleService_UpdateRole2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1Role"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "role.id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "acl": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "$ref": "#/definitions/v1UpdateRolePermissionAcl"
+                      }
+                    }
+                  }
+                },
+                "updateMask": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name"
+              ]
+            }
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      }
+    },
+    "/v1/roles": {
+      "get": {
+        "summary": "authz: user.role,*,list",
+        "operationId": "RoleService_ListRoles",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListRolesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageOffset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$eq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$neq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$contains",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$starts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$nstarts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$ends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$nends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$in",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.id.$nin",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.id.$null",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.id.$nnull",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.id.$empty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.id.$nempty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.id.$like",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.name.$eq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.name.$neq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.name.$contains",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.name.$starts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.name.$nstarts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.name.$ends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.name.$nends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.name.$in",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.name.$nin",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.name.$null",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.name.$nnull",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.name.$empty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.name.$nempty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.name.$like",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      }
+    },
+    "/v1/user": {
+      "post": {
+        "summary": "CreateUser\nauthz: user.user,*,create",
+        "operationId": "UserService_CreateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1User"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/user/admin/user": {
+      "post": {
+        "summary": "CreateUser\nauthz: user.admin.user,*,create",
+        "operationId": "UserAdminService_CreateUserAdmin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1User"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AdminCreateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserAdminService"
+        ]
+      }
+    },
+    "/v1/user/admin/user/list": {
+      "post": {
+        "summary": "ListUsers\nauthz: user.admin.user,*,list",
+        "operationId": "UserAdminService_ListUsersAdmin2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AdminListUsersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AdminListUsersRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserAdminService"
+        ]
+      }
+    },
+    "/v1/user/admin/user/{id}": {
+      "get": {
+        "summary": "GetUser\nauthz: user.admin.user,id,get",
+        "operationId": "UserAdminService_GetUserAdmin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1User"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "UserAdminService"
+        ]
+      },
+      "delete": {
+        "summary": "DeleteUser\nauthz: user.admin.user,id,delete",
+        "operationId": "UserAdminService_DeleteUserAdmin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AdminDeleteUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "UserAdminService"
+        ]
+      }
+    },
+    "/v1/user/admin/user/{user.id}": {
+      "put": {
+        "summary": "UpdateUser\nauthz: user.admin.user,id,update",
+        "operationId": "UserAdminService_UpdateUserAdmin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1User"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "user.id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string",
+                      "x-nullable": true
+                    },
+                    "name": {
+                      "type": "string",
+                      "x-nullable": true
+                    },
+                    "phone": {
+                      "type": "string",
+                      "x-nullable": true
+                    },
+                    "email": {
+                      "type": "string",
+                      "x-nullable": true
+                    },
+                    "birthday": {
+                      "type": "string",
+                      "format": "date-time",
+                      "x-nullable": true
+                    },
+                    "gender": {
+                      "$ref": "#/definitions/v1Gender"
+                    },
+                    "password": {
+                      "type": "string",
+                      "title": "reset password"
+                    },
+                    "confirmPassword": {
+                      "type": "string"
+                    },
+                    "avatar": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "updateMask": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "UserAdminService"
+        ]
+      },
+      "patch": {
+        "summary": "UpdateUser\nauthz: user.admin.user,id,update",
+        "operationId": "UserAdminService_UpdateUserAdmin2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1User"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "user.id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string",
+                      "x-nullable": true
+                    },
+                    "name": {
+                      "type": "string",
+                      "x-nullable": true
+                    },
+                    "phone": {
+                      "type": "string",
+                      "x-nullable": true
+                    },
+                    "email": {
+                      "type": "string",
+                      "x-nullable": true
+                    },
+                    "birthday": {
+                      "type": "string",
+                      "format": "date-time",
+                      "x-nullable": true
+                    },
+                    "gender": {
+                      "$ref": "#/definitions/v1Gender"
+                    },
+                    "password": {
+                      "type": "string",
+                      "title": "reset password"
+                    },
+                    "confirmPassword": {
+                      "type": "string"
+                    },
+                    "avatar": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "updateMask": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "UserAdminService"
+        ]
+      }
+    },
+    "/v1/user/admin/users": {
+      "get": {
+        "summary": "ListUsers\nauthz: user.admin.user,*,list",
+        "operationId": "UserAdminService_ListUsersAdmin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AdminListUsersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageOffset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$eq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$neq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$contains",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$starts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$nstarts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$ends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$nends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$in",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.id.$nin",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.id.$null",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.id.$nnull",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.id.$empty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.id.$nempty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.id.$like",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.gender.$eq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.gender.$neq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.gender.$contains",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.gender.$starts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.gender.$nstarts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.gender.$ends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.gender.$nends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.gender.$in",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.gender.$nin",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.gender.$null",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.gender.$nnull",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.gender.$empty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.gender.$nempty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.gender.$like",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.birthday.$eq",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "filter.birthday.$neq",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "filter.birthday.$gt",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "filter.birthday.$gte",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "filter.birthday.$lt",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "filter.birthday.$lte",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "filter.birthday.$null",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.birthday.$nnull",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.id.$eq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.id.$neq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.id.$contains",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.id.$starts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.id.$nstarts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.id.$ends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.id.$nends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.id.$in",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.roles.id.$nin",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.roles.id.$null",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.id.$nnull",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.id.$empty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.id.$nempty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.id.$like",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.name.$eq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.name.$neq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.name.$contains",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.name.$starts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.name.$nstarts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.name.$ends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.name.$nends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.name.$in",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.roles.name.$nin",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.roles.name.$null",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.name.$nnull",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.name.$empty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.name.$nempty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.name.$like",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "UserAdminService"
+        ]
+      }
+    },
+    "/v1/user/list": {
+      "post": {
+        "summary": "ListUsers\nauthz: user.user,*,list",
+        "operationId": "UserService_ListUsers2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListUsersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListUsersRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/user/public/invite": {
+      "post": {
+        "summary": "InviteUser\nauthz: user.user,*,create",
+        "operationId": "UserService_InviteUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1InviteUserReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1InviteUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/user/public/search": {
+      "get": {
+        "operationId": "UserService_PublicSearchUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SearchUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "identity",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "phone",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/user/{id}": {
+      "get": {
+        "summary": "GetUser\nauthz: user.user,id,get",
+        "operationId": "UserService_GetUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1User"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      },
+      "delete": {
+        "summary": "DeleteUser\nauthz: user.user,id,delete",
+        "operationId": "UserService_DeleteUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/user/{id}/permission": {
+      "get": {
+        "operationId": "UserService_GetUserPermission",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetUserPermissionReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      },
+      "put": {
+        "operationId": "UserService_UpdateUserPermission",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserPermissionReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "acl": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "$ref": "#/definitions/v1UpdateSubjectPermissionAcl"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/user/{id}/roles": {
+      "get": {
+        "summary": "GetUserRoles\nauthz: user.user,id,get",
+        "operationId": "UserService_GetUserRoles",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetUserRoleReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/user/{user.id}": {
+      "put": {
+        "summary": "UpdateUser\nauthz: user.user,id,update",
+        "operationId": "UserService_UpdateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1User"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "user.id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "rolesId": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "updateMask": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      },
+      "patch": {
+        "summary": "UpdateUser\nauthz: user.user,id,update",
+        "operationId": "UserService_UpdateUser2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1User"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "user.id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "rolesId": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "updateMask": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/users": {
+      "get": {
+        "summary": "ListUsers\nauthz: user.user,*,list",
+        "operationId": "UserService_ListUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListUsersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageOffset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$eq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$neq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$contains",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$starts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$nstarts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$ends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$nends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$in",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.id.$nin",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.id.$null",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.id.$nnull",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.id.$empty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.id.$nempty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.id.$like",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.gender.$eq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.gender.$neq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.gender.$contains",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.gender.$starts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.gender.$nstarts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.gender.$ends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.gender.$nends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.gender.$in",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.gender.$nin",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.gender.$null",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.gender.$nnull",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.gender.$empty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.gender.$nempty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.gender.$like",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.birthday.$eq",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "filter.birthday.$neq",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "filter.birthday.$gt",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "filter.birthday.$gte",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "filter.birthday.$lt",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "filter.birthday.$lte",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "filter.birthday.$null",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.birthday.$nnull",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.id.$eq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.id.$neq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.id.$contains",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.id.$starts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.id.$nstarts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.id.$ends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.id.$nends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.id.$in",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.roles.id.$nin",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.roles.id.$null",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.id.$nnull",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.id.$empty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.id.$nempty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.id.$like",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.name.$eq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.name.$neq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.name.$contains",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.name.$starts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.name.$nstarts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.name.$ends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.name.$nends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.roles.name.$in",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.roles.name.$nin",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.roles.name.$null",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.name.$nnull",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.name.$empty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.name.$nempty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.roles.name.$like",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/{service}/dtm/query-prepared": {
+      "get": {
+        "operationId": "MsgService_QueryPrepared",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "service",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "MsgService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "SearchUserResponseSearchUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "avatar": {
+          "$ref": "#/definitions/blobBlobFile"
+        }
+      }
+    },
+    "blobBlobFile": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "mime": {
+          "type": "string"
+        },
+        "size": {
+          "type": "string",
+          "format": "int64"
+        },
+        "url": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object"
+        }
+      }
+    },
+    "dataDynamicValue": {
+      "type": "object",
+      "properties": {
+        "intValue": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "longValue": {
+          "type": "string",
+          "format": "int64"
+        },
+        "floatValue": {
+          "type": "number",
+          "format": "float"
+        },
+        "doubleValue": {
+          "type": "number",
+          "format": "double"
+        },
+        "stringValue": {
+          "type": "string"
+        },
+        "boolValue": {
+          "type": "boolean"
+        },
+        "nullValue": {
+          "type": "string"
+        },
+        "jsonValue": {
+          "type": "object"
+        }
+      }
+    },
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "lbsAddress": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string",
+          "title": "State or province"
+        },
+        "city": {
+          "type": "string"
+        },
+        "zipCode": {
+          "type": "string"
+        },
+        "line1": {
+          "type": "string"
+        },
+        "line2": {
+          "type": "string"
+        },
+        "line3": {
+          "type": "string"
+        },
+        "geo": {
+          "type": "object",
+          "title": "Geo geojson"
+        }
+      }
+    },
+    "operationDateFilterOperators": {
+      "type": "object",
+      "properties": {
+        "$eq": {
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "$neq": {
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "$gt": {
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "$gte": {
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "$lt": {
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "$lte": {
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "$null": {
+          "type": "boolean",
+          "x-nullable": true
+        },
+        "$nnull": {
+          "type": "boolean",
+          "x-nullable": true
+        }
+      }
+    },
+    "operationStringFilterOperation": {
+      "type": "object",
+      "properties": {
+        "$eq": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "$neq": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "$contains": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "$starts_with": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "$nstarts_with": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "$ends_with": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "$nends_with": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "$in": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "$nin": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "$null": {
+          "type": "boolean",
+          "x-nullable": true
+        },
+        "$nnull": {
+          "type": "boolean",
+          "x-nullable": true
+        },
+        "$empty": {
+          "type": "boolean",
+          "x-nullable": true
+        },
+        "$nempty": {
+          "type": "boolean",
+          "x-nullable": true
+        },
+        "$like": {
+          "type": "string",
+          "x-nullable": true
+        }
+      }
+    },
+    "permissionv1PermissionDef": {
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "side": {
+          "$ref": "#/definitions/v1PermissionSide"
+        },
+        "extra": {
+          "type": "object"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        },
+        "granted": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "permissionv1PermissionDefGroup": {
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "side": {
+          "$ref": "#/definitions/v1PermissionSide"
+        },
+        "priority": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "def": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/permissionv1PermissionDef"
+          }
+        },
+        "extra": {
+          "type": "object"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "pricePricePb": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "currencyCode": {
+          "type": "string"
+        },
+        "digits": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "text": {
+          "type": "string"
+        },
+        "amountDecimal": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "protobufNullValue": {
+      "type": "string",
+      "enum": [
+        "NULL_VALUE"
+      ],
+      "default": "NULL_VALUE",
+      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
+    },
+    "userv1UserRole": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "v1AddSubjectPermissionResponse": {
+      "type": "object"
+    },
+    "v1AdminCreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "name": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "phone": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "email": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "password": {
+          "type": "string"
+        },
+        "confirmPassword": {
+          "type": "string"
+        },
+        "birthday": {
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "gender": {
+          "$ref": "#/definitions/v1Gender"
+        },
+        "avatar": {
+          "type": "string"
+        }
+      }
+    },
+    "v1AdminDeleteUserResponse": {
+      "type": "object"
+    },
+    "v1AdminListUsersRequest": {
+      "type": "object",
+      "properties": {
+        "pageOffset": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "search": {
+          "type": "string"
+        },
+        "sort": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fields": {
+          "type": "string"
+        },
+        "filter": {
+          "$ref": "#/definitions/v1UserFilter"
+        }
+      }
+    },
+    "v1AdminListUsersResponse": {
+      "type": "object",
+      "properties": {
+        "totalSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "filterSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1User"
+          }
+        }
+      }
+    },
+    "v1AdminUpdateUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "name": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "phone": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "email": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "birthday": {
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "gender": {
+          "$ref": "#/definitions/v1Gender"
+        },
+        "password": {
+          "type": "string",
+          "title": "reset password"
+        },
+        "confirmPassword": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "v1ChangePasswordByForgetReply": {
+      "type": "object"
+    },
+    "v1ChangePasswordByForgetRequest": {
+      "type": "object",
+      "properties": {
+        "changePasswordToken": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        },
+        "confirmNewPassword": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "changePasswordToken",
+        "newPassword",
+        "confirmNewPassword"
+      ]
+    },
+    "v1ChangePasswordByPreReply": {
+      "type": "object"
+    },
+    "v1ChangePasswordByPreRequest": {
+      "type": "object",
+      "properties": {
+        "prePassword": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        },
+        "confirmNewPassword": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "prePassword",
+        "newPassword",
+        "confirmNewPassword"
+      ]
+    },
+    "v1CheckPermissionReply": {
+      "type": "object",
+      "properties": {
+        "effect": {
+          "$ref": "#/definitions/v1Effect"
+        }
+      }
+    },
+    "v1CheckPermissionRequest": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "namespace",
+        "resource",
+        "action"
+      ]
+    },
+    "v1CheckSubjectsPermissionReply": {
+      "type": "object",
+      "properties": {
+        "effectList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Effect"
+          }
+        }
+      }
+    },
+    "v1CheckUserTenantReply": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "title": "can user access this tenant"
+        }
+      }
+    },
+    "v1CreateAddressReply": {
+      "type": "object"
+    },
+    "v1CreateAddressesRequest": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string"
+        },
+        "usage": {
+          "type": "string"
+        },
+        "prefer": {
+          "type": "boolean"
+        },
+        "address": {
+          "$ref": "#/definitions/lbsAddress"
+        },
+        "metadata": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "address"
+      ]
+    },
+    "v1CreateRoleRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "v1CreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "name": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "phone": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "email": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "password": {
+          "type": "string"
+        },
+        "confirmPassword": {
+          "type": "string"
+        },
+        "birthday": {
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "gender": {
+          "$ref": "#/definitions/v1Gender"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "rolesId": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "v1DeleteAddressesReply": {
+      "type": "object"
+    },
+    "v1DeleteRoleResponse": {
+      "type": "object"
+    },
+    "v1DeleteUserResponse": {
+      "type": "object"
+    },
+    "v1Effect": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "GRANT",
+        "FORBIDDEN"
+      ],
+      "default": "UNKNOWN"
+    },
+    "v1FindOrCreateStripeCustomerReply": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/v1User"
+        },
+        "stripeCustomerId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ForgetPasswordReply": {
+      "type": "object",
+      "properties": {
+        "changePasswordToken": {
+          "type": "string",
+          "title": "next step for change password"
+        }
+      }
+    },
+    "v1ForgetPasswordRequest": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "email": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ForgetPasswordTokenReply": {
+      "type": "object",
+      "properties": {
+        "expire": {
+          "type": "string",
+          "title": "expire time"
+        }
+      }
+    },
+    "v1ForgetPasswordTokenRequest": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "email": {
+          "type": "string",
+          "x-nullable": true
+        }
+      }
+    },
+    "v1Gender": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "MALE",
+        "FEMALE",
+        "OTHER"
+      ],
+      "default": "UNKNOWN"
+    },
+    "v1GetAddressesReply": {
+      "type": "object",
+      "properties": {
+        "addresses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UserAddress"
+          }
+        }
+      }
+    },
+    "v1GetConsentResponse": {
+      "type": "object",
+      "properties": {
+        "challenge": {
+          "type": "string"
+        },
+        "requestedScope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "userId": {
+          "type": "string"
+        },
+        "client": {
+          "$ref": "#/definitions/v1OAuthClient"
+        },
+        "redirect": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "challenge"
+      ]
+    },
+    "v1GetCsrfTokenResponse": {
+      "type": "object",
+      "properties": {
+        "csrfToken": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetCurrentPermissionReply": {
+      "type": "object",
+      "properties": {
+        "acl": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Permission"
+          }
+        }
+      }
+    },
+    "v1GetLoginResponse": {
+      "type": "object",
+      "properties": {
+        "redirect": {
+          "type": "string",
+          "title": "normalized redirect url"
+        },
+        "oauth": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1OAuthProvider"
+          }
+        },
+        "hint": {
+          "type": "string"
+        },
+        "challenge": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetLogoutResponse": {
+      "type": "object",
+      "properties": {
+        "challenge": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetProfileResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "name": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "phone": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "email": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "birthday": {
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "gender": {
+          "$ref": "#/definitions/v1Gender"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Role"
+          }
+        },
+        "tenants": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UserTenant"
+          },
+          "title": "user available tenants"
+        },
+        "avatar": {
+          "$ref": "#/definitions/blobBlobFile"
+        },
+        "currentTenant": {
+          "$ref": "#/definitions/v1UserTenant"
+        }
+      }
+    },
+    "v1GetRolePermissionResponse": {
+      "type": "object",
+      "properties": {
+        "acl": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Permission"
+          }
+        },
+        "defGroups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/permissionv1PermissionDefGroup"
+          }
+        }
+      }
+    },
+    "v1GetSettingsResponse": {
+      "type": "object",
+      "properties": {
+        "settings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Settings"
+          }
+        }
+      }
+    },
+    "v1GetUserPermissionReply": {
+      "type": "object",
+      "properties": {
+        "acl": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Permission"
+          }
+        },
+        "defGroups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/permissionv1PermissionDefGroup"
+          }
+        }
+      }
+    },
+    "v1GetUserRoleReply": {
+      "type": "object",
+      "properties": {
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/userv1UserRole"
+          }
+        }
+      }
+    },
+    "v1GrantConsentRequest": {
+      "type": "object",
+      "properties": {
+        "challenge": {
+          "type": "string"
+        },
+        "grantScope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "user granted scope"
+        },
+        "reject": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1GrantConsentResponse": {
+      "type": "object",
+      "properties": {
+        "redirect": {
+          "type": "string"
+        }
+      }
+    },
+    "v1InviteUserReply": {
+      "type": "object",
+      "properties": {
+        "requiredConfirm": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1InviteUserRequest": {
+      "type": "object",
+      "properties": {
+        "identify": {
+          "type": "string",
+          "title": "username email or phone"
+        }
+      },
+      "required": [
+        "identify"
+      ]
+    },
+    "v1ListRolesRequest": {
+      "type": "object",
+      "properties": {
+        "pageOffset": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "search": {
+          "type": "string"
+        },
+        "sort": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fields": {
+          "type": "string"
+        },
+        "filter": {
+          "$ref": "#/definitions/v1RoleFilter"
+        }
+      }
+    },
+    "v1ListRolesResponse": {
+      "type": "object",
+      "properties": {
+        "totalSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "filterSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Role"
+          }
+        }
+      }
+    },
+    "v1ListSubjectPermissionResponse": {
+      "type": "object",
+      "properties": {
+        "acl": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Permission"
+          }
+        },
+        "defGroups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/permissionv1PermissionDefGroup"
+          }
+        }
+      }
+    },
+    "v1ListUsersRequest": {
+      "type": "object",
+      "properties": {
+        "pageOffset": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "search": {
+          "type": "string"
+        },
+        "sort": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fields": {
+          "type": "string"
+        },
+        "filter": {
+          "$ref": "#/definitions/v1UserFilter"
+        }
+      }
+    },
+    "v1ListUsersResponse": {
+      "type": "object",
+      "properties": {
+        "totalSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "filterSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1User"
+          }
+        }
+      }
+    },
+    "v1LoginAuthReply": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "tokenType": {
+          "type": "string",
+          "title": "Bearer"
+        },
+        "expires": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Expires time in seconds\r\nDeprecated, use expires_in instead"
+        },
+        "refreshToken": {
+          "type": "string",
+          "title": "Refresh token to keep login state"
+        },
+        "expiresIn": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Expires time in seconds"
+        },
+        "redirect": {
+          "type": "string"
+        }
+      }
+    },
+    "v1LoginAuthRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "remember": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "username",
+        "password"
+      ]
+    },
+    "v1LoginPasswordlessReply": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "tokenType": {
+          "type": "string",
+          "title": "Bearer"
+        },
+        "refreshToken": {
+          "type": "string",
+          "title": "Refresh token to keep login state"
+        },
+        "expiresIn": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Expires time in seconds"
+        }
+      }
+    },
+    "v1LoginPasswordlessRequest": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "email": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "token": {
+          "type": "string"
+        },
+        "web": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "token"
+      ]
+    },
+    "v1LogoutRequest": {
+      "type": "object",
+      "properties": {
+        "challenge": {
+          "type": "string"
+        }
+      }
+    },
+    "v1LogoutResponse": {
+      "type": "object",
+      "properties": {
+        "redirect": {
+          "type": "string"
+        }
+      }
+    },
+    "v1MessageProto": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        },
+        "header": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1OAuthClient": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "clientName": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "clientUri": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "contacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "logoUri": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "metadata": {
+          "type": "object",
+          "x-nullable": true
+        },
+        "owner": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "policyUri": {
+          "type": "string",
+          "x-nullable": true
+        }
+      }
+    },
+    "v1OAuthProvider": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "v1PasswordlessTokenAuthReply": {
+      "type": "object",
+      "properties": {
+        "expire": {
+          "type": "string",
+          "title": "expire time"
+        }
+      }
+    },
+    "v1PasswordlessTokenAuthRequest": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "email": {
+          "type": "string",
+          "x-nullable": true
+        }
+      }
+    },
+    "v1Permission": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "effect": {
+          "$ref": "#/definitions/v1Effect"
+        },
+        "tenantId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1PermissionRequirement": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "namespace",
+        "resource",
+        "action"
+      ]
+    },
+    "v1PermissionSide": {
+      "type": "string",
+      "enum": [
+        "BOTH",
+        "HOST_ONLY",
+        "TENANT_ONLY"
+      ],
+      "default": "BOTH"
+    },
+    "v1Plan": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "sort": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "productId": {
+          "type": "string"
+        },
+        "prices": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Price"
+          }
+        }
+      },
+      "required": [
+        "key",
+        "displayName"
+      ]
+    },
+    "v1Price": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "tenantId": {
+          "type": "string"
+        },
+        "ownerType": {
+          "type": "string",
+          "title": "product/product_sku"
+        },
+        "ownerId": {
+          "type": "string"
+        },
+        "productId": {
+          "type": "string"
+        },
+        "currencyCode": {
+          "type": "string"
+        },
+        "default": {
+          "$ref": "#/definitions/pricePricePb"
+        },
+        "discounted": {
+          "$ref": "#/definitions/pricePricePb"
+        },
+        "discountText": {
+          "type": "string"
+        },
+        "denyMoreDiscounts": {
+          "type": "boolean"
+        },
+        "billingScheme": {
+          "type": "string"
+        },
+        "currencyOptions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1PriceCurrencyOption"
+          }
+        },
+        "recurring": {
+          "$ref": "#/definitions/v1PriceRecurring"
+        },
+        "tiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1PriceTier"
+          }
+        },
+        "tiersMode": {
+          "type": "string"
+        },
+        "transformQuantity": {
+          "$ref": "#/definitions/v1PriceTransformQuantity"
+        },
+        "type": {
+          "type": "string"
+        },
+        "stripePriceId": {
+          "type": "string",
+          "x-nullable": true
+        }
+      }
+    },
+    "v1PriceCurrencyOption": {
+      "type": "object",
+      "properties": {
+        "currencyCode": {
+          "type": "string"
+        },
+        "default": {
+          "$ref": "#/definitions/pricePricePb"
+        },
+        "discounted": {
+          "$ref": "#/definitions/pricePricePb"
+        },
+        "discountText": {
+          "type": "string"
+        },
+        "denyMoreDiscounts": {
+          "type": "boolean"
+        },
+        "tiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1PriceCurrencyOptionTier"
+          }
+        }
+      }
+    },
+    "v1PriceCurrencyOptionTier": {
+      "type": "object",
+      "properties": {
+        "flat": {
+          "$ref": "#/definitions/pricePricePb"
+        },
+        "unit": {
+          "$ref": "#/definitions/pricePricePb"
+        },
+        "upTo": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1PriceRecurring": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "type": "string"
+        },
+        "intervalCount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "trialPeriodDays": {
+          "type": "string",
+          "format": "int64"
+        },
+        "aggregateUsage": {
+          "type": "string"
+        },
+        "usageType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "interval"
+      ]
+    },
+    "v1PriceTier": {
+      "type": "object",
+      "properties": {
+        "flat": {
+          "$ref": "#/definitions/pricePricePb"
+        },
+        "unit": {
+          "$ref": "#/definitions/pricePricePb"
+        },
+        "upTo": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "v1PriceTransformQuantity": {
+      "type": "object",
+      "properties": {
+        "divideBy": {
+          "type": "string",
+          "format": "int64"
+        },
+        "round": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "round"
+      ]
+    },
+    "v1RefreshRememberTokenReply": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "newRmToken": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RefreshTokenAuthReply": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "tokenType": {
+          "type": "string",
+          "title": "Bearer"
+        },
+        "refreshToken": {
+          "type": "string",
+          "title": "Refresh token to keep login state"
+        },
+        "expiresIn": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Expires time in seconds"
+        }
+      }
+    },
+    "v1RefreshTokenAuthRequest": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "refreshToken"
+      ]
+    },
+    "v1RegisterAuthReply": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "tokenType": {
+          "type": "string",
+          "title": "Bearer"
+        },
+        "refreshToken": {
+          "type": "string",
+          "title": "Refresh token to keep login state"
+        },
+        "expiresIn": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Expires time in seconds"
+        }
+      }
+    },
+    "v1RegisterAuthRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "confirmPassword": {
+          "type": "string"
+        },
+        "web": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "username",
+        "password",
+        "confirmPassword"
+      ]
+    },
+    "v1RemoveSubjectPermissionReply": {
+      "type": "object"
+    },
+    "v1Role": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "isPreserved": {
+          "type": "boolean"
+        },
+        "acl": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Permission"
+          }
+        },
+        "defGroups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/permissionv1PermissionDefGroup"
+          }
+        }
+      }
+    },
+    "v1RoleFilter": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/operationStringFilterOperation"
+        },
+        "name": {
+          "$ref": "#/definitions/operationStringFilterOperation"
+        }
+      }
+    },
+    "v1SearchUserResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/SearchUserResponseSearchUser"
+        }
+      }
+    },
+    "v1Settings": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/definitions/dataDynamicValue"
+        }
+      }
+    },
+    "v1SettingsFilter": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "$ref": "#/definitions/operationStringFilterOperation"
+        }
+      }
+    },
+    "v1TenantInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "logo": {
+          "$ref": "#/definitions/blobBlobFile"
+        },
+        "host": {
+          "type": "string"
+        },
+        "planKey": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "plan": {
+          "$ref": "#/definitions/v1Plan"
+        }
+      },
+      "title": "TenantInfo public tenant information"
+    },
+    "v1TokenReply": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "tokenType": {
+          "type": "string",
+          "title": "Bearer"
+        },
+        "refreshToken": {
+          "type": "string",
+          "title": "Refresh token to keep login state"
+        },
+        "expiresIn": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Expires time in seconds"
+        }
+      }
+    },
+    "v1TokenRequest": {
+      "type": "object",
+      "properties": {
+        "grantType": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "v1UpdateAddress": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "usage": {
+          "type": "string"
+        },
+        "prefer": {
+          "type": "boolean"
+        },
+        "address": {
+          "$ref": "#/definitions/lbsAddress"
+        },
+        "metadata": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "address"
+      ]
+    },
+    "v1UpdateAddressesReply": {
+      "type": "object"
+    },
+    "v1UpdateProfileRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "name": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "gender": {
+          "$ref": "#/definitions/v1Gender"
+        }
+      }
+    },
+    "v1UpdateProfileResponse": {
+      "type": "object"
+    },
+    "v1UpdateRole": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "acl": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UpdateRolePermissionAcl"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "v1UpdateRolePermissionAcl": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        },
+        "effect": {
+          "$ref": "#/definitions/v1Effect"
+        }
+      }
+    },
+    "v1UpdateRolePermissionResponse": {
+      "type": "object"
+    },
+    "v1UpdateSettings": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/definitions/dataDynamicValue"
+        },
+        "reset": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1UpdateSettingsRequest": {
+      "type": "object",
+      "properties": {
+        "settings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UpdateSettings"
+          }
+        }
+      }
+    },
+    "v1UpdateSettingsResponse": {
+      "type": "object",
+      "properties": {
+        "settings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Settings"
+          }
+        }
+      }
+    },
+    "v1UpdateSubjectPermissionAcl": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        },
+        "effect": {
+          "$ref": "#/definitions/v1Effect"
+        },
+        "tenantId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "namespace",
+        "resource",
+        "action",
+        "effect"
+      ]
+    },
+    "v1UpdateSubjectPermissionResponse": {
+      "type": "object",
+      "properties": {
+        "acl": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Permission"
+          }
+        }
+      }
+    },
+    "v1UpdateUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "rolesId": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "v1UpdateUserPermissionReply": {
+      "type": "object"
+    },
+    "v1User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "name": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "phone": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "email": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "birthday": {
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "gender": {
+          "$ref": "#/definitions/v1Gender"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Role"
+          }
+        },
+        "avatar": {
+          "$ref": "#/definitions/blobBlobFile"
+        }
+      }
+    },
+    "v1UserAddress": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "usage": {
+          "type": "string"
+        },
+        "prefer": {
+          "type": "boolean"
+        },
+        "address": {
+          "$ref": "#/definitions/lbsAddress"
+        },
+        "metadata": {
+          "type": "object"
+        }
+      }
+    },
+    "v1UserFilter": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/operationStringFilterOperation"
+        },
+        "gender": {
+          "$ref": "#/definitions/operationStringFilterOperation"
+        },
+        "birthday": {
+          "$ref": "#/definitions/operationDateFilterOperators"
+        },
+        "roles": {
+          "$ref": "#/definitions/v1RoleFilter"
+        },
+        "and": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UserFilter"
+          }
+        },
+        "or": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UserFilter"
+          }
+        }
+      }
+    },
+    "v1UserTenant": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "tenantId": {
+          "type": "string"
+        },
+        "tenant": {
+          "$ref": "#/definitions/v1TenantInfo"
+        },
+        "isHost": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1ValidatePasswordReply": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1ValidatePasswordRequest": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "v1WeChatLoginReply": {
+      "type": "object",
+      "properties": {
+        "next": {
+          "type": "string",
+          "title": "Next step. could be \"\", \"phone\", \"phone_realtime\","
+        },
+        "nextToken": {
+          "type": "string"
+        },
+        "token": {
+          "$ref": "#/definitions/v1TokenReply"
+        }
+      }
+    },
+    "v1WebLoginAuthReply": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "tokenType": {
+          "type": "string",
+          "title": "Bearer"
+        },
+        "expires": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Expires time in seconds"
+        },
+        "refreshToken": {
+          "type": "string",
+          "title": "Refresh token to keep login state"
+        },
+        "expiresIn": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Expires time in seconds"
+        },
+        "redirect": {
+          "type": "string"
+        }
+      }
+    },
+    "v1WebLoginAuthRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "remember": {
+          "type": "boolean"
+        },
+        "challenge": {
+          "type": "string"
+        },
+        "reject": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "username",
+        "password"
+      ]
+    },
+    "v1WechatMiniProgramCodeReq": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "appId",
+        "code"
+      ]
+    },
+    "v1WechatMiniProgramPhoneCodeReq": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "nextToken": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "appId",
+        "code",
+        "nextToken"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "bearer": {
+      "type": "apiKey",
+      "description": "Authentication token, prefixed by Bearer: Bearer \u003ctoken\u003e",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
+}

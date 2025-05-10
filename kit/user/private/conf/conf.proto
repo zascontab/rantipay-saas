@@ -1,0 +1,51 @@
+syntax = "proto3";
+package user.internal;
+
+option go_package = "github.com/go-saas/kit/user/private/conf;conf";
+
+import "conf/conf.proto";
+import "google/protobuf/wrappers.proto";
+import "blob/blob.proto";
+import "google/protobuf/duration.proto";
+import "authz/authz/def.proto";
+import "idp/idp.proto";
+import "stripe/stripe.proto";
+
+message Bootstrap {
+  conf.Data data = 2;
+  conf.Security security=3;
+  conf.Services services =4;
+  UserConf user=5;
+  conf.Logging logging=6;
+  conf.Tracers tracing=7;
+  conf.AppConfig app=8;
+  conf.Dev dev=9;
+  .stripe.Conf stripe=501;
+}
+
+
+message Admin{
+  string username =1;
+  string password=2;
+}
+
+message UserConf{
+  // Minimum password score. [0-5]
+  int32 password_score_min=1;
+  Admin admin =2;
+  string root_url=4;
+  // default to 5m
+  google.protobuf.Duration email_confirm_expiry = 5;
+  // default to 5m
+  google.protobuf.Duration phone_confirm_expiry = 6;
+  // default to 5m
+  google.protobuf.Duration email_recover_expiry = 7;
+  // default to 5m
+  google.protobuf.Duration phone_recover_expiry = 8;
+  // default to 5m
+  google.protobuf.Duration login_passwordless_expiry=9;
+
+  optional google.protobuf.StringValue totp_2fa_issuer=100;
+  idp.Config idp=200;
+}
+

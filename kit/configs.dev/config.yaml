@@ -1,0 +1,85 @@
+services:
+  registry:
+    type: etcd
+    endpoint: http://host.docker.internal:3379
+  servers:
+    user:
+      http:
+        addr : ":19080"
+        endpoint: host.docker.internal:19080
+      grpc:
+        addr : ":19081"
+        endpoint: host.docker.internal:19081
+    saas:
+      http:
+        addr : ":19180"
+        endpoint: host.docker.internal:19180
+      grpc:
+        addr : ":19181"
+        endpoint: host.docker.internal:19181
+    sys:
+      http:
+        addr : ":19280"
+        endpoint: host.docker.internal:19280
+      grpc:
+        addr : ":19281"
+        endpoint: host.docker.internal:19281
+    realtime:
+      http:
+        addr: ":19380"
+        endpoint: host.docker.internal:19380
+      grpc:
+        addr: ":19381"
+        endpoint: host.docker.internal:19381
+    payment:
+      http:
+        addr: ":19480"
+        endpoint: host.docker.internal:19480
+      grpc:
+        addr: ":19481"
+        endpoint: host.docker.internal:19481
+    order:
+      http:
+        addr: ":19580"
+        endpoint: host.docker.internal:19580
+      grpc:
+        addr: ":19581"
+        endpoint: host.docker.internal:19581
+    product:
+      http:
+        addr: ":19680"
+        endpoint: host.docker.internal:19680
+      grpc:
+        addr: ":19681"
+        endpoint: host.docker.internal:19681
+data:
+  endpoints:
+    events:
+      default:
+        addr: host.docker.internal:9094
+        type: kafka
+    databases:
+      default:
+        debug: true
+        driver: mysql
+        source: root:youShouldChangeThis@tcp(host.docker.internal:3406)/kit?parseTime=true
+    redis:
+      default:
+        addrs: ["host.docker.internal:7379"]
+        password: youShouldChangeThis
+
+logging:
+  zap:
+    level: "info"
+    outputPaths: [ "stdout"]
+    errorOutputPaths: [ "stderr" ]
+    encoding: console
+    development: true
+    encoderConfig:
+      messageKey: message
+      levelKey: level
+      levelEncoder: lowercase
+
+tracing:
+  otel:
+    grpc: host.docker.internal:4317

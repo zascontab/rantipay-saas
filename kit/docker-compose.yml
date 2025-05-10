@@ -1,0 +1,115 @@
+version: '3.7'
+services:
+
+  web:
+    image: ${DOCKER_REGISTRY}go-saas-kit-frontend:${DOCKER_TAG:-latest}
+    restart: unless-stopped
+
+  api_docs:
+    image: ${DOCKER_REGISTRY}go-saas-kit-swagger:${DOCKER_TAG:-latest}
+    environment:
+      - BASE_URL="/swagger"
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./openapi/Dockerfile
+
+  apisix:
+    image: ${DOCKER_REGISTRY}go-saas-kit-apisix:${DOCKER_TAG:-latest}
+    ports:
+      - "80:9080" #Http
+      - "9091:9091" #Prometheus
+      - "443:443" #Https
+      - "9280:9280" #Admin Api
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./gateway/apisix/Dockerfile
+
+  apisix-dashboard:
+    image: apache/apisix-dashboard:3.0.1-alpine
+    restart: always
+    volumes:
+      - ./quickstart/configs/apisix/dashboard_conf/conf.yaml:/usr/local/apisix-dashboard/conf/conf.yaml
+    ports:
+      - "9000:9000"
+
+
+  hydra:
+    image: oryd/hydra:v2.2.0
+    ports:
+      - "4444:4444" # Public port
+      - "4445:4445" # Admin port
+      - "5555:5555" # Port for hydra token user
+    command:
+      serve -c /etc/config/hydra/hydra.yml all --dev
+    volumes:
+      - ./quickstart/configs/hydra:/etc/config/hydra
+
+    environment:
+      - DSN=mysql://root:youShouldChangeThis@tcp(mysqld:3306)/kit?max_conns=20&max_idle_conns=4
+    restart: unless-stopped
+    depends_on:
+      - hydra-migrate
+
+  hydra-migrate:
+    image: oryd/hydra:v2.2.0
+    environment:
+      - DSN=mysql://root:youShouldChangeThis@tcp(mysqld:3306)/kit?max_conns=20&max_idle_conns=4
+    command:
+      migrate -c /etc/config/hydra/hydra.yml sql -e --yes
+    volumes:
+      - ./quickstart/configs/hydra:/etc/config/hydra
+    restart: on-failure
+    depends_on:
+      - mysqld
+
+  mysqld:
+    image: mysql:8.0
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=youShouldChangeThis
+      - MYSQL_ROOT_HOST=%
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3406:3306"
+
+  redis:
+    image: redis:6.0
+    restart: always
+    command: redis-server --requirepass youShouldChangeThis
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+    ports:
+      - "7379:6379"
+
+  etcd:
+    image: bitnami/etcd:3.5.0
+    restart: always
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+    ports:
+      - "3379:2379"
+    volumes:
+      - etcd_data:/bitnami/etcd
+
+  dtm:
+    image: goxiaoy/dtm:1.17.9
+    restart: unless-stopped
+    command: ["-c", "/data/conf.yml"]
+    volumes:
+      - ./quickstart/configs/dtm/conf.yml:/data/conf.yml
+    ports:
+      - "36790:36790"
+      - "36789:36789"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  mysql_data:
+  etcd_data:

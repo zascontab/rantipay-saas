@@ -1,0 +1,280 @@
+syntax = "proto3";
+
+package saas.api.tenant.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "blob/blob.proto";
+import "google/api/field_behavior.proto";
+import "query/operation.proto";
+import "data/data.proto";
+import "saas/api/plan/v1/plan.proto";
+
+option go_package = "github.com/go-saas/kit/saas/api/tenant/v1;v1";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+		title: "Saas Service";
+		version: "1.0";
+	};
+	security_definitions: {
+		security: {
+			key: "bearer"
+			value: {
+				type: TYPE_API_KEY
+				in: IN_HEADER
+				name: "Authorization"
+				description: "Authentication token, prefixed by Bearer: Bearer <token>"
+			}
+		}
+	}
+	security: {
+		security_requirement: {
+			key: "bearer"
+		}
+	}
+};
+
+service TenantService {
+
+	//CreateTenant
+	//authz: saas.tenant,*,create
+	rpc CreateTenant (CreateTenantRequest) returns (Tenant){
+		option (google.api.http) = {
+			post: "/v1/saas/tenant"
+			body: "*"
+		};
+	};
+
+	//UpdateTenant
+	//authz: saas.tenant,{id},update
+	rpc UpdateTenant (UpdateTenantRequest) returns (Tenant){
+		option (google.api.http) = {
+			put: "/v1/saas/tenant/{tenant.id}"
+			body: "*"
+			additional_bindings: [
+				{
+					patch: "/v1/saas/tenant/{tenant.id}"
+					body: "*"
+				}
+			]
+		};
+	}
+
+	//DeleteTenant
+	//authz: saas.tenant,{id},delete
+	rpc DeleteTenant (DeleteTenantRequest) returns (DeleteTenantReply){
+		option (google.api.http) = {
+			delete: "/v1/saas/tenant/{id}"
+		};
+	}
+
+	// GetTenant
+	// authz: saas.tenant,{id},get
+	rpc GetTenant (GetTenantRequest) returns (Tenant){
+		option (google.api.http) = {
+			get: "/v1/saas/tenant/{id_or_name}"
+		};
+	}
+
+	// GetTenant
+	// authz: saas.tenant,{id},get
+	rpc GetTenantPublic (GetTenantPublicRequest) returns (TenantInfo){
+		option (google.api.http) = {
+			get: "/v1/saas/tenant/{id_or_name}/public"
+		};
+	}
+
+	//ListTenant
+	//authz: saas.tenant,*,list
+	rpc ListTenant (ListTenantRequest) returns (ListTenantReply){
+		option (google.api.http) = {
+			get: "/v1/saas/tenants"
+			additional_bindings:{
+				post: "/v1/saas/tenant/list"
+				body: "*"
+			}
+		};
+	}
+
+	//GetCurrentTenant
+	rpc GetCurrentTenant (GetCurrentTenantRequest) returns (GetCurrentTenantReply){
+		option (google.api.http) = {
+			get: "/v1/saas/current"
+		};
+	}
+
+
+	rpc ChangeTenant(ChangeTenantRequest)returns(ChangeTenantReply){
+		option (google.api.http) = {
+			post: "/v1/saas/change-tenant/{id_or_name}"
+			body: "*"
+		};
+	}
+
+	//CreateTenant
+	rpc UserCreateTenant (UserCreateTenantRequest) returns (UserCreateTenantReply){
+		option (google.api.http) = {
+			post: "/v1/saas/user/tenant"
+			body: "*"
+		};
+	};
+
+}
+
+
+service TenantInternalService{
+	//GetTenant internal api for remote tenant store
+	rpc GetTenant (GetTenantRequest) returns (Tenant){
+	}
+
+	rpc ListTenant (ListTenantRequest) returns (ListTenantReply){
+	}
+
+}
+
+message CreateTenantRequest {
+	string name=2 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED,(validate.rules).string.pattern="^[A-Za-z0-9](?:[A-Za-z0-9\\-]{1,61}[A-Za-z0-9])?$"];
+	string display_name=3;
+	string region = 4;
+	string logo =5;
+
+	bool separate_db=6;
+
+	optional string admin_email = 7 [(validate.rules).string.email=true];
+	optional string admin_username=8;
+	optional string admin_password=9;
+	optional string admin_user_id=10;
+}
+
+
+message UpdateTenantRequest {
+	UpdateTenant tenant=1  [(validate.rules).message.required=true,(google.api.field_behavior) = REQUIRED];
+	google.protobuf.FieldMask update_mask = 2;
+}
+
+
+message UpdateTenant{
+	string id=1 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED];
+	string name =2 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED,(validate.rules).string.pattern="^[A-Za-z0-9](?:[A-Za-z0-9\\-]{1,61}[A-Za-z0-9])?$"];
+	string display_name=3;
+
+	repeated TenantConnectionString conn=7;
+	repeated TenantFeature features=8;
+	string logo =9;
+}
+
+message DeleteTenantRequest {
+	string id=1;
+}
+message DeleteTenantReply {
+	string id=1;
+}
+
+message GetTenantRequest {
+	string id_or_name=1;
+}
+
+message GetTenantPublicRequest{
+	string id_or_name=1;
+}
+
+message TenantFilter{
+	query.operation.StringFilterOperation id=1;
+	query.operation.StringFilterOperation name =2;
+	query.operation.StringFilterOperation region=4;
+}
+
+message ListTenantRequest {
+	int32 page_offset =1;
+	int32 page_size = 2;
+	string search = 3;
+	repeated string sort =4;
+	google.protobuf.FieldMask fields=5;
+	TenantFilter filter =6;
+}
+
+message ListTenantReply {
+	int32 total_size =1;
+	int32 filter_size =2;
+
+	repeated Tenant items = 3;
+}
+
+message Tenant{
+	string id=1;
+	string name=2;
+	string display_name=3;
+	string region=4;
+	optional google.protobuf.Timestamp created_at=5;
+	optional google.protobuf.Timestamp updated_at=6;
+
+	repeated TenantConnectionString conn=7;
+	repeated TenantFeature features=8;
+
+	blob.BlobFile logo = 9;
+	bool separate_db=10;
+	string host=11;
+
+	optional string plan_key=20;
+
+	.saas.api.plan.v1.Plan plan=21;
+}
+
+message TenantConnectionString{
+	string key=1;
+	string value=2;
+}
+
+message TenantFeature{
+	string key=1;
+	data.DynamicValue value=2;
+}
+
+//TenantInfo public tenant information
+message TenantInfo{
+	string id=1;
+	string name=2;
+	string display_name=3;
+	string region=4;
+	blob.BlobFile logo = 9;
+	string host=10;
+
+	optional string plan_key=20;
+	.saas.api.plan.v1.Plan plan=21;
+}
+
+
+message GetCurrentTenantRequest{
+
+}
+
+message GetCurrentTenantReply{
+		TenantInfo tenant=1;
+		bool is_host=2;
+}
+
+message ChangeTenantRequest{
+	string id_or_name=1;
+}
+
+message ChangeTenantReply{
+	TenantInfo tenant=1;
+	bool is_host=2;
+}
+
+message UserCreateTenantRequest{
+	string name=2 [(validate.rules).string.min_len=1,(google.api.field_behavior) = REQUIRED,(validate.rules).string.pattern="^[A-Za-z0-9](?:[A-Za-z0-9\\-]{1,61}[A-Za-z0-9])?$"];
+	string display_name=3;
+	string region = 4;
+	string logo =5;
+
+}
+message UserCreateTenantReply{
+	Tenant tenant=1;
+}

@@ -1,0 +1,42 @@
+# https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/58ee30b6bbe6c940690c63d5f8882fc5e7b2895b/examples/demo/otel-collector-config.yaml
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http: # add OTLP HTTP Receiver，default port is 4318
+
+exporters:
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    const_labels:
+      label1: value1
+
+  debug:
+
+  otlp:
+    endpoint: jaeger-all-in-one:4317
+    tls:
+      insecure: true
+
+processors:
+  batch:
+
+extensions:
+  health_check:
+  pprof:
+    endpoint: :1888
+  zpages:
+    endpoint: :55679
+
+service:
+  extensions: [pprof, zpages, health_check]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug, otlp]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug, prometheus]

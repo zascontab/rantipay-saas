@@ -1,0 +1,171 @@
+syntax = "proto3";
+
+package conf;
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/wrappers.proto";
+import "blob/blob.proto";
+import "email/email.proto";
+import "event/event.proto";
+import "registry/registry.proto";
+import "redis/redis.proto";
+
+option go_package = "github.com/go-saas/kit/pkg/conf;conf";
+
+message Server {
+  message HTTP {
+
+    message Cors{
+      repeated string allowed_origins=1;
+      repeated string allowed_methods=2;
+      repeated string allowed_headers=3;
+    }
+
+    message Csrf{
+      Cookie cookie=10;
+      optional google.protobuf.StringValue request_header=17;
+      optional google.protobuf.StringValue field_name =18;
+      repeated string trusted_origins=20;
+    }
+
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+    Cors cors=4;
+    Csrf csrf=5;
+    string endpoint=6;
+
+  }
+  message GRPC {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+    string endpoint=6;
+  }
+  HTTP http = 1;
+  GRPC grpc = 2;
+}
+
+message Client{
+  string client_id=1;
+  // server clients use secret
+  string client_secret=2;
+  google.protobuf.Duration timeout = 3;
+}
+
+message Service{
+  string redirect=1;
+}
+
+message Services{
+  map<string,Service> services = 1;
+  // Servers configure server config
+  map<string,Server> servers =2;
+  // Clients server to server communication client
+  map<string,Client> clients =3;
+  //Registry for service discovery
+  registry.Config registry=4;
+}
+
+message Database {
+  string driver = 1;
+  string source = 2;
+  bool debug = 3;
+}
+
+message Endpoints{
+  map<string, Database> databases = 1;
+  map<string,event.Config> events=2;
+  map<string,redis.Config> redis=3;
+  email.Config email=4;
+  Sms sms=5;
+}
+
+
+message Security{
+  message Jwt{
+    google.protobuf.Duration expire_in=1;
+    string secret=2;
+    google.protobuf.Duration refresh_token_expire_in=3;
+    string issuer=4;
+  }
+  message CookieKey{
+    string hash_key=1;
+    optional google.protobuf.StringValue block_key=2;
+  }
+  Jwt jwt=1;
+  CookieKey security_cookie=2;
+
+  Cookie session_cookie=6;
+  Cookie remember_cookie=7;
+
+  Oidc oidc=8;
+}
+
+enum SameSiteMode{
+  SameSiteDefault =0;
+  SameSiteLax=1;
+  SameSiteStrict=2;
+  SameSiteNone=3;
+}
+
+message Cookie{
+  optional google.protobuf.StringValue name=10;
+
+  optional google.protobuf.Int32Value max_age=11;
+  optional google.protobuf.StringValue domain=12;
+  optional google.protobuf.StringValue path=13;
+  optional google.protobuf.BoolValue http_only =14;
+  optional google.protobuf.BoolValue secure =15;
+  SameSiteMode same_site=16;
+}
+
+message Oidc{
+  string provider=1;
+  Hydra hydra=2;
+}
+
+message Hydra{
+  string admin_url=1;
+  string public_url=2;
+}
+
+
+message Logging{
+  // Zap config, see https://github.com/uber-go/zap/blob/78c80fbae8e745f49704cca337f9ad0eca1ca93f/config.go#L58
+  google.protobuf.Struct zap=100;
+}
+
+
+message Sms{
+  string provider=1;
+}
+
+message Tracers{
+  message Otel{
+    string grpc=1;
+  }
+  Otel otel=1;
+}
+
+message AppConfig{
+  optional google.protobuf.StringValue tenant_key=1;
+  optional google.protobuf.StringValue domain_format=2;
+  string host_display_name=3;
+  string host_logo=4;
+  // see https://github.com/google/libphonenumber/blob/master/java/libphonenumber/test/com/google/i18n/phonenumbers/RegionCode.java
+  optional string phone_default_region=100;
+  string app_name=5;
+}
+
+
+message Data {
+  conf.Endpoints endpoints = 1;
+  repeated blob.Config vfs = 3;
+}
+
+message Dev{
+  //docker integration
+  bool docker = 1;
+}

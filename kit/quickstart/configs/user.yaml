@@ -1,0 +1,27 @@
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 1s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 1s
+data:
+  database:
+    driver: mysql
+    source: root:youShouldChangeThis@tcp(mysqld:3306)/kit?parseTime=true
+  redis:
+    addr: redis:6379
+    password: youShouldChangeThis
+    dial_timeout: 1s
+    read_timeout: 0.4s
+    write_timeout: 0.6s
+auth:
+  key: "some-jwt-key-for-testing-only"
+  method: "HS256"
+trace:
+  endpoint: "http://otel-collector:4318/v1/traces"
+  sampler: 1.0
+  batcher: "otlp"
+  env: "dev"
+logger:
+  level: "info"

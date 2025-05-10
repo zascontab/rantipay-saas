@@ -1,0 +1,2142 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "System Service",
+    "version": "1.0"
+  },
+  "tags": [
+    {
+      "name": "MenuService"
+    },
+    {
+      "name": "ClientService"
+    },
+    {
+      "name": "KeyService"
+    },
+    {
+      "name": "LocaleService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/oidc/client": {
+      "post": {
+        "operationId": "ClientService_CreateOAuth2Client",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/clientOAuth2Client"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/clientOAuth2Client"
+            }
+          }
+        ],
+        "tags": [
+          "ClientService"
+        ]
+      }
+    },
+    "/v1/oidc/client/list": {
+      "post": {
+        "operationId": "ClientService_ListOAuth2Clients2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/clientOAuth2ClientList"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/clientListClientRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ClientService"
+        ]
+      }
+    },
+    "/v1/oidc/client/{id}": {
+      "get": {
+        "operationId": "ClientService_GetOAuth2Client",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/clientOAuth2Client"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ClientService"
+        ]
+      },
+      "delete": {
+        "operationId": "ClientService_DeleteOAuth2Client",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ClientService"
+        ]
+      },
+      "put": {
+        "operationId": "ClientService_UpdateOAuth2Client",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/clientOAuth2Client"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "client": {
+                  "$ref": "#/definitions/clientOAuth2Client"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "ClientService"
+        ]
+      },
+      "patch": {
+        "operationId": "ClientService_PatchOAuth2Client",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/clientOAuth2Client"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "client": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "$ref": "#/definitions/clientPatchOAuth2Client"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "ClientService"
+        ]
+      }
+    },
+    "/v1/oidc/clients": {
+      "get": {
+        "operationId": "ClientService_ListOAuth2Clients",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/clientOAuth2ClientList"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "clientName",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "afterPageToken",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "beforePageToken",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ClientService"
+        ]
+      }
+    },
+    "/v1/oidc/keys/{set}": {
+      "get": {
+        "operationId": "KeyService_GetJsonWebKeySet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/keyJsonWebKeySet"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "set",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "KeyService"
+        ]
+      },
+      "delete": {
+        "operationId": "KeyService_DeleteJsonWebKeySet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "set",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "KeyService"
+        ]
+      },
+      "post": {
+        "operationId": "KeyService_CreateJsonWebKeySet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/keyJsonWebKeySet"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "set",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "keys": {
+                  "$ref": "#/definitions/keyJsonWebKeySetGeneratorRequest"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "KeyService"
+        ]
+      },
+      "put": {
+        "operationId": "KeyService_UpdateJsonWebKeySet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/keyJsonWebKeySet"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "set",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "keys": {
+                  "$ref": "#/definitions/keyJsonWebKeySet"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "KeyService"
+        ]
+      }
+    },
+    "/v1/oidc/keys/{set}/{kid}": {
+      "get": {
+        "operationId": "KeyService_GetJsonWebKey",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/keyJsonWebKeySet"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "set",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "kid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "KeyService"
+        ]
+      },
+      "delete": {
+        "operationId": "KeyService_DeleteJsonWebKey",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "set",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "kid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "KeyService"
+        ]
+      },
+      "put": {
+        "operationId": "KeyService_UpdateJsonWebKey",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/keyJsonWebKey"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "set",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "kid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "$ref": "#/definitions/keyJsonWebKey"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "KeyService"
+        ]
+      }
+    },
+    "/v1/sys/locale/msgs": {
+      "get": {
+        "operationId": "LocaleService_ListMessages",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListMessageReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter.nameIn",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "LocaleService"
+        ]
+      }
+    },
+    "/v1/sys/menu": {
+      "post": {
+        "operationId": "MenuService_CreateMenu",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1Menu"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateMenuRequest"
+            }
+          }
+        ],
+        "tags": [
+          "MenuService"
+        ]
+      }
+    },
+    "/v1/sys/menu/list": {
+      "post": {
+        "operationId": "MenuService_ListMenu2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListMenuReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListMenuRequest"
+            }
+          }
+        ],
+        "tags": [
+          "MenuService"
+        ]
+      }
+    },
+    "/v1/sys/menu/{id}": {
+      "get": {
+        "operationId": "MenuService_GetMenu",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1Menu"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "MenuService"
+        ]
+      },
+      "delete": {
+        "operationId": "MenuService_DeleteMenu",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteMenuReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "MenuService"
+        ]
+      }
+    },
+    "/v1/sys/menu/{menu.id}": {
+      "put": {
+        "operationId": "MenuService_UpdateMenu",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1Menu"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "menu.id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "menu": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "desc": {
+                      "type": "string"
+                    },
+                    "component": {
+                      "type": "string"
+                    },
+                    "requirement": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "$ref": "#/definitions/v1PermissionRequirement"
+                      }
+                    },
+                    "parent": {
+                      "type": "string",
+                      "title": "parent menu"
+                    },
+                    "props": {
+                      "type": "object"
+                    },
+                    "fullPath": {
+                      "type": "string"
+                    },
+                    "priority": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "ignoreAuth": {
+                      "type": "boolean"
+                    },
+                    "icon": {
+                      "type": "string"
+                    },
+                    "iframe": {
+                      "type": "string"
+                    },
+                    "microApp": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "redirect": {
+                      "type": "string"
+                    },
+                    "microAppName": {
+                      "type": "string"
+                    },
+                    "microAppBaseRoute": {
+                      "type": "string"
+                    },
+                    "microAppDev": {
+                      "type": "string"
+                    },
+                    "hideInMenu": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "updateMask": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name"
+              ]
+            }
+          }
+        ],
+        "tags": [
+          "MenuService"
+        ]
+      },
+      "patch": {
+        "operationId": "MenuService_UpdateMenu2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1Menu"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "menu.id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "menu": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "desc": {
+                      "type": "string"
+                    },
+                    "component": {
+                      "type": "string"
+                    },
+                    "requirement": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "$ref": "#/definitions/v1PermissionRequirement"
+                      }
+                    },
+                    "parent": {
+                      "type": "string",
+                      "title": "parent menu"
+                    },
+                    "props": {
+                      "type": "object"
+                    },
+                    "fullPath": {
+                      "type": "string"
+                    },
+                    "priority": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "ignoreAuth": {
+                      "type": "boolean"
+                    },
+                    "icon": {
+                      "type": "string"
+                    },
+                    "iframe": {
+                      "type": "string"
+                    },
+                    "microApp": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "redirect": {
+                      "type": "string"
+                    },
+                    "microAppName": {
+                      "type": "string"
+                    },
+                    "microAppBaseRoute": {
+                      "type": "string"
+                    },
+                    "microAppDev": {
+                      "type": "string"
+                    },
+                    "hideInMenu": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "updateMask": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name"
+              ]
+            }
+          }
+        ],
+        "tags": [
+          "MenuService"
+        ]
+      }
+    },
+    "/v1/sys/menus": {
+      "get": {
+        "operationId": "MenuService_ListMenu",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListMenuReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageOffset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$eq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$neq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$contains",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$starts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$nstarts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$ends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$nends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.id.$in",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.id.$nin",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.id.$null",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.id.$nnull",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.id.$empty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.id.$nempty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.id.$like",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.name.$eq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.name.$neq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.name.$contains",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.name.$starts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.name.$nstarts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.name.$ends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.name.$nends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.name.$in",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.name.$nin",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.name.$null",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.name.$nnull",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.name.$empty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.name.$nempty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.name.$like",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.parent.$eq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.parent.$neq",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.parent.$contains",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.parent.$starts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.parent.$nstarts_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.parent.$ends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.parent.$nends_with",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter.parent.$in",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.parent.$nin",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "filter.parent.$null",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.parent.$nnull",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.parent.$empty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.parent.$nempty",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "filter.parent.$like",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "MenuService"
+        ]
+      }
+    },
+    "/v1/sys/menus/available": {
+      "get": {
+        "operationId": "MenuService_GetAvailableMenus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAvailableMenusReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "MenuService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "clientListClientRequest": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "string",
+          "format": "int64"
+        },
+        "offset": {
+          "type": "string",
+          "format": "int64"
+        },
+        "clientName": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "afterPageToken": {
+          "type": "string"
+        },
+        "beforePageToken": {
+          "type": "string"
+        }
+      }
+    },
+    "clientOAuth2Client": {
+      "type": "object",
+      "properties": {
+        "allowedCorsOrigins": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "audience": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "backchannelLogoutSessionRequired": {
+          "type": "boolean",
+          "x-nullable": true
+        },
+        "backchannelLogoutUri": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "clientId": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "clientName": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "clientSecret": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "clientSecretExpiresAt": {
+          "type": "string",
+          "format": "int64",
+          "x-nullable": true
+        },
+        "clientUri": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "contacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "frontchannelLogoutSessionRequired": {
+          "type": "boolean",
+          "x-nullable": true
+        },
+        "frontchannelLogoutUri": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "grantTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "jwks": {
+          "type": "object",
+          "x-nullable": true
+        },
+        "jwksUri": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "logoUri": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "metadata": {
+          "type": "object",
+          "x-nullable": true
+        },
+        "owner": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "policyUri": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "postLogoutRedirectUris": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "redirectUris": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "registrationAccessToken": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "registrationClientUri": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "requestObjectSigningAlg": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "requestUris": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "responseTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scope": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "sectorIdentifierUri": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "subjectType": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "tokenEndpointAuthMethod": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "tokenEndpointAuthSigningAlg": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "tosUri": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "userinfoSignedResponseAlg": {
+          "type": "string",
+          "x-nullable": true
+        }
+      }
+    },
+    "clientOAuth2ClientList": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/clientOAuth2Client"
+          }
+        },
+        "totalSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "nextAfterPageToken": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "nextBeforePageToken": {
+          "type": "string",
+          "x-nullable": true
+        }
+      }
+    },
+    "clientPatchOAuth2Client": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "op": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "value": {
+          "type": "object"
+        }
+      }
+    },
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "keyJsonWebKey": {
+      "type": "object",
+      "properties": {
+        "alg": {
+          "type": "string"
+        },
+        "crv": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "d": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "dp": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "dq": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "e": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "k": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "kid": {
+          "type": "string"
+        },
+        "kty": {
+          "type": "string"
+        },
+        "n": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "p": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "q": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "qi": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "use": {
+          "type": "string"
+        },
+        "x": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "x5c": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "y": {
+          "type": "string",
+          "x-nullable": true
+        }
+      },
+      "required": [
+        "alg",
+        "kid",
+        "kty",
+        "use"
+      ]
+    },
+    "keyJsonWebKeySet": {
+      "type": "object",
+      "properties": {
+        "keys": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/keyJsonWebKey"
+          }
+        }
+      }
+    },
+    "keyJsonWebKeySetGeneratorRequest": {
+      "type": "object",
+      "properties": {
+        "alg": {
+          "type": "string"
+        },
+        "kid": {
+          "type": "string"
+        },
+        "use": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "alg",
+        "kid",
+        "use"
+      ]
+    },
+    "operationStringFilterOperation": {
+      "type": "object",
+      "properties": {
+        "$eq": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "$neq": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "$contains": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "$starts_with": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "$nstarts_with": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "$ends_with": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "$nends_with": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "$in": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "$nin": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "$null": {
+          "type": "boolean",
+          "x-nullable": true
+        },
+        "$nnull": {
+          "type": "boolean",
+          "x-nullable": true
+        },
+        "$empty": {
+          "type": "boolean",
+          "x-nullable": true
+        },
+        "$nempty": {
+          "type": "boolean",
+          "x-nullable": true
+        },
+        "$like": {
+          "type": "string",
+          "x-nullable": true
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "protobufNullValue": {
+      "type": "string",
+      "enum": [
+        "NULL_VALUE"
+      ],
+      "default": "NULL_VALUE",
+      "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
+    },
+    "v1CreateMenuRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "desc": {
+          "type": "string"
+        },
+        "component": {
+          "type": "string"
+        },
+        "requirement": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1PermissionRequirement"
+          }
+        },
+        "parent": {
+          "type": "string",
+          "title": "parent menu"
+        },
+        "props": {
+          "type": "object"
+        },
+        "fullPath": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ignoreAuth": {
+          "type": "boolean"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "iframe": {
+          "type": "string"
+        },
+        "microApp": {
+          "type": "string"
+        },
+        "meta": {
+          "type": "object"
+        },
+        "title": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "redirect": {
+          "type": "string"
+        },
+        "microAppName": {
+          "type": "string"
+        },
+        "microAppBaseRoute": {
+          "type": "string"
+        },
+        "microAppDev": {
+          "type": "string"
+        },
+        "hideInMenu": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "v1DeleteMenuReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetAvailableMenusReply": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Menu"
+          }
+        }
+      }
+    },
+    "v1ListMenuReply": {
+      "type": "object",
+      "properties": {
+        "totalSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "filterSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Menu"
+          }
+        }
+      }
+    },
+    "v1ListMenuRequest": {
+      "type": "object",
+      "properties": {
+        "pageOffset": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "search": {
+          "type": "string"
+        },
+        "sort": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fields": {
+          "type": "string"
+        },
+        "filter": {
+          "$ref": "#/definitions/v1MenuFilter"
+        }
+      }
+    },
+    "v1ListMessageReply": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1LocaleLanguage"
+          }
+        }
+      }
+    },
+    "v1LocaleLanguage": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1LocaleMessage"
+          }
+        }
+      }
+    },
+    "v1LocaleMessage": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "other": {
+          "type": "string"
+        }
+      }
+    },
+    "v1Menu": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "desc": {
+          "type": "string"
+        },
+        "component": {
+          "type": "string"
+        },
+        "requirement": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1PermissionRequirement"
+          }
+        },
+        "parent": {
+          "type": "string",
+          "title": "parent menu"
+        },
+        "props": {
+          "type": "object"
+        },
+        "fullPath": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ignoreAuth": {
+          "type": "boolean"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "iframe": {
+          "type": "string"
+        },
+        "microApp": {
+          "type": "string"
+        },
+        "meta": {
+          "type": "object"
+        },
+        "title": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "redirect": {
+          "type": "string"
+        },
+        "microAppName": {
+          "type": "string"
+        },
+        "microAppBaseRoute": {
+          "type": "string"
+        },
+        "microAppDev": {
+          "type": "string"
+        },
+        "hideInMenu": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1MenuFilter": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/operationStringFilterOperation"
+        },
+        "name": {
+          "$ref": "#/definitions/operationStringFilterOperation"
+        },
+        "parent": {
+          "$ref": "#/definitions/operationStringFilterOperation"
+        }
+      }
+    },
+    "v1MessageFilter": {
+      "type": "object",
+      "properties": {
+        "nameIn": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1PermissionRequirement": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "namespace",
+        "resource",
+        "action"
+      ]
+    },
+    "v1UpdateMenu": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "desc": {
+          "type": "string"
+        },
+        "component": {
+          "type": "string"
+        },
+        "requirement": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1PermissionRequirement"
+          }
+        },
+        "parent": {
+          "type": "string",
+          "title": "parent menu"
+        },
+        "props": {
+          "type": "object"
+        },
+        "fullPath": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ignoreAuth": {
+          "type": "boolean"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "iframe": {
+          "type": "string"
+        },
+        "microApp": {
+          "type": "string"
+        },
+        "meta": {
+          "type": "object"
+        },
+        "title": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "redirect": {
+          "type": "string"
+        },
+        "microAppName": {
+          "type": "string"
+        },
+        "microAppBaseRoute": {
+          "type": "string"
+        },
+        "microAppDev": {
+          "type": "string"
+        },
+        "hideInMenu": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "bearer": {
+      "type": "apiKey",
+      "description": "Authentication token, prefixed by Bearer: Bearer \u003ctoken\u003e",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
+}

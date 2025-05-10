@@ -1,0 +1,32 @@
+version: v1
+plugins:
+  - name: go
+    out: ./buf
+    opt: paths=source_relative
+  - name: go-http
+    out: ./buf
+    opt: paths=source_relative
+  - name: go-grpc
+    out: ./buf
+    opt:
+      - paths=source_relative
+      - require_unimplemented_servers=false
+  - name: go-grpc-proxy
+    out: ./buf
+    opt:
+      - paths=source_relative
+  - name: validate
+    out: ./buf
+    opt:
+      - paths=source_relative
+      - lang=go
+  - name: go-errors-i18n
+    out: ./buf
+    opt:
+      - paths=source_relative
+  - plugin: buf.build/grpc-ecosystem/openapiv2:v2.15.2
+    out: ./openapi
+    opt:
+      - allow_merge=true
+      - proto3_optional_nullable=true
+      - merge_file_name=kit-merged
