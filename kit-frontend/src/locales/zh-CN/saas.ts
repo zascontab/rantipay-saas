@@ -1,0 +1,18 @@
+export default {
+  'saas.title': 'Saas',
+  'saas.tenant.management': '租户管理',
+  'saas.switch': '切换租户',
+  'saas.switch.backToHost': '返回管理端',
+  'saas.switch.host': '管理端',
+  'saas.switch.placeholder': '输入租户域名',
+  'saas.tenant.logo': '图标',
+  'saas.tenant.name': '名称（域名）',
+  'saas.tenant.displayName': '显示名称',
+  'saas.tenant.region': '地域',
+  'saas.tenant.separateDb': '偏好独立数据库',
+  'saas.tenant.adminUsername': '管理员用户名',
+  'saas.tenant.adminPassword': '管理员密码',
+  'saas.tenant.admin': '管理员',
+  'saas.tenant.create': '创建租户',
+  'saas.tenant.upgradePlan': '升级计划',
+};
