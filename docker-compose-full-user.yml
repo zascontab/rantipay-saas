@@ -60,20 +60,26 @@ services:
       - ./nginx-gateway/nginx-hybrid-plus.conf:/etc/nginx/nginx.conf:ro
     restart: unless-stopped
     depends_on:
-      - simple-user
+      - user
       - companies
     networks:
       - app-network
 
-  # Servicio de usuario simplificado
-  simple-user:
-    build:
-      context: ./simple-user
-      dockerfile: Dockerfile
+  # Servicio completo de usuario
+  user:
+    image: go-saas-kit-user:latest
     environment:
       - TZ=UTC
     ports:
       - "8000:8000"
+      - "9000:9000"
+    volumes:
+      - ./configs/user:/data/conf
+      - ./kit/.assets:/app/.assets
+    depends_on:
+      - mysqld
+      - redis
+      - etcd
     restart: unless-stopped
     networks:
       - app-network
