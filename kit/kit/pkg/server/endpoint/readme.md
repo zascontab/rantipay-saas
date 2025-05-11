@@ -1,1 +1,0 @@
-https://github.com/go-kratos/kratos/tree/main/internal/endpoint

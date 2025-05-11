@@ -1,0 +1,449 @@
+
+wsi@dev:~/developer/projects/rantipay/wankarlab/rantipay_saas$ # Crear un directorio específico para las configuraciones de los servicios
+mkdir -p ~/developer/projects/rantipay/wankarlab/rantipay_saas/configs/user
+mkdir -p ~/developer/projects/rantipay/wankarlab/rantipay_saas/configs/saas
+mkdir -p ~/developer/projects/rantipay/wankarlab/rantipay_saas/configs/sys
+
+# Verificar el contenido actual del directorio configs
+ls -la ~/developer/projects/rantipay/wankarlab/rantipay_saas/configs/
+total 56
+drwxrwxr-x  9 wsi wsi 4096 may 10 22:58 .
+drwxrwxr-x 10 wsi wsi 4096 may 10 22:53 ..
+drwxrwxr-x  4 wsi wsi 4096 may  9 22:36 apisix
+-rw-rw-r--  1 wsi wsi 1534 may 10 21:25 config.yaml
+drwxrwxr-x  2 wsi wsi 4096 may  9 22:36 dtm
+drwxrwxr-x  2 wsi wsi 4096 may  9 22:36 hydra
+drwxrwxr-x  2 wsi wsi 4096 may  9 22:36 otel
+-rw-rw-r--  1 wsi wsi  182 may  9 22:36 payment.yaml
+drwxrwxr-x  2 wsi wsi 4096 may 10 22:58 saas
+-rw-rw-r--  1 wsi wsi  163 may 10 21:26 saas.yaml
+drwxrwxr-x  2 wsi wsi 4096 may 10 22:58 sys
+-rw-rw-r--  1 wsi wsi  249 may 10 21:26 sys.yaml
+drwxrwxr-x  2 wsi wsi 4096 may 10 22:58 user
+-rw-rw-r--  1 wsi wsi  249 may 10 21:26 user.yaml
+wsi@dev:~/developer/projects/rantipay/wankarlab/rantipay_saas$ # Crear config.yaml para user
+cat > ~/developer/projects/rantipay/wankarlab/rantipay_saas/configs/user/config.yaml << 'EOF'
+app:
+  name: user
+  version: "1.0"
+  env: dev
+  host_display_name: GO-SAAS-KIT-USER
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 60s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 60s
+data:
+  database:
+    driver: mysql
+    source: root:youShouldChangeThis@tcp(mysqld:3306)/kit?parseTime=true
+  redis:
+    addr: redis:6379
+    password: youShouldChangeThis
+    db: 0
+logging:
+EOFevel: debugyouShouldChangeThishis@tcp(mysqld:3306)/kit?parseTime=trueconfig.yaml << 'EOF''
+wsi@dev:~/developer/projects/rantipay/wankarlab/rantipay_saas$ # Actualizar Dockerfile.user
+cat > ~/developer/projects/rantipay/wankarlab/rantipay_saas/dockerfiles/Dockerfile.user << 'EOF'
+FROM debian:stable-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        netbase \
+        && rm -rf /var/lib/apt/lists/ \
+        && apt-get autoremove -y && apt-get autoclean -y
+
+WORKDIR /app
+
+COPY kit/bin/user /app/
+COPY configs/user /data/conf
+
+EXPOSE 8000
+EXPOSE 9000
+VOLUME /data/conf
+
+CMD ["./user", "-conf", "/data/conf"]
+EOF
+
+# Actualizar Dockerfile.saas
+EOF ["./sys", "-conf", "/data/conf"]apt-get autoclean -ycommends \files/Dockerfile.sys << 'EOF''
+wsi@dev:~/developer/projects/rantipay/wankarlab/rantipay_saas$ # Reconstruir las imágenes Docker
+cd ~/developer/projects/rantipay/wankarlab/rantipay_saas
+docker build -t go-saas-kit-user:latest -f dockerfiles/Dockerfile.user .
+docker build -t go-saas-kit-saas:latest -f dockerfiles/Dockerfile.saas .
+docker build -t go-saas-kit-sys:latest -f dockerfiles/Dockerfile.sys .
+[+] Building 1.8s (10/10) FINISHED                                                                                                                       docker:default
+ => [internal] load build definition from Dockerfile.user                                                                                                          0.0s
+ => => transferring dockerfile: 427B                                                                                                                               0.0s
+ => [internal] load metadata for docker.io/library/debian:stable-slim                                                                                              0.8s
+ => [internal] load .dockerignore                                                                                                                                  0.0s
+ => => transferring context: 2B                                                                                                                                    0.0s
+ => [1/5] FROM docker.io/library/debian:stable-slim@sha256:88f88a2b8bd1873876a2ff15df523a66602aa57177e24b5f22064c4886ec398a                                        0.0s
+ => [internal] load build context                                                                                                                                  0.6s
+ => => transferring context: 114.79MB                                                                                                                              0.6s
+ => CACHED [2/5] RUN apt-get update && apt-get install -y --no-install-recommends         ca-certificates         netbase         && rm -rf /var/lib/apt/lists/    0.0s
+ => CACHED [3/5] WORKDIR /app                                                                                                                                      0.0s
+ => CACHED [4/5] COPY kit/bin/user /app/                                                                                                                           0.0s
+ => [5/5] COPY configs/user /data/conf                                                                                                                             0.4s
+ => exporting to image                                                                                                                                             0.0s
+ => => exporting layers                                                                                                                                            0.0s
+ => => writing image sha256:94ae75414c4446e696649b2f9112365033382a420dc9655397dee75d9c28639a                                                                       0.0s
+ => => naming to docker.io/library/go-saas-kit-user:latest                                                                                                         0.0s
+[+] Building 1.0s (10/10) FINISHED                                                                                                                       docker:default
+ => [internal] load build definition from Dockerfile.saas                                                                                                          0.0s
+ => => transferring dockerfile: 427B                                                                                                                               0.0s
+ => [internal] load metadata for docker.io/library/debian:stable-slim                                                                                              0.1s
+ => [internal] load .dockerignore                                                                                                                                  0.0s
+ => => transferring context: 2B                                                                                                                                    0.0s
+ => [internal] load build context                                                                                                                                  0.5s
+ => => transferring context: 98.06MB                                                                                                                               0.5s
+ => [1/5] FROM docker.io/library/debian:stable-slim@sha256:88f88a2b8bd1873876a2ff15df523a66602aa57177e24b5f22064c4886ec398a                                        0.0s
+ => CACHED [2/5] RUN apt-get update && apt-get install -y --no-install-recommends         ca-certificates         netbase         && rm -rf /var/lib/apt/lists/    0.0s
+ => CACHED [3/5] WORKDIR /app                                                                                                                                      0.0s
+ => CACHED [4/5] COPY kit/bin/saas /app/                                                                                                                           0.0s
+ => [5/5] COPY configs/saas /data/conf                                                                                                                             0.3s
+ => exporting to image                                                                                                                                             0.0s
+ => => exporting layers                                                                                                                                            0.0s
+ => => writing image sha256:2470fb5dc3b5bc937606643d1a87ac71dea400e13dac1f5e7e2e60383bf492a0                                                                       0.0s
+ => => naming to docker.io/library/go-saas-kit-saas:latest                                                                                                         0.0s
+[+] Building 1.1s (10/10) FINISHED                                                                                                                       docker:default
+ => [internal] load build definition from Dockerfile.sys                                                                                                           0.0s
+ => => transferring dockerfile: 423B                                                                                                                               0.0s
+ => [internal] load metadata for docker.io/library/debian:stable-slim                                                                                              0.1s
+ => [internal] load .dockerignore                                                                                                                                  0.0s
+ => => transferring context: 2B                                                                                                                                    0.0s
+ => [1/5] FROM docker.io/library/debian:stable-slim@sha256:88f88a2b8bd1873876a2ff15df523a66602aa57177e24b5f22064c4886ec398a                                        0.0s
+ => [internal] load build context                                                                                                                                  0.5s
+ => => transferring context: 106.58MB                                                                                                                              0.5s
+ => CACHED [2/5] RUN apt-get update && apt-get install -y --no-install-recommends         ca-certificates         netbase         && rm -rf /var/lib/apt/lists/    0.0s
+ => CACHED [3/5] WORKDIR /app                                                                                                                                      0.0s
+ => CACHED [4/5] COPY kit/bin/sys /app/                                                                                                                            0.0s
+ => [5/5] COPY configs/sys /data/conf                                                                                                                              0.4s
+ => exporting to image                                                                                                                                             0.0s
+ => => exporting layers                                                                                                                                            0.0s
+ => => writing image sha256:1d411530e7543b4951c550cd696bcc5f4ad08f1714329b9d958ad290e7c6fbd3                                                                       0.0s
+ => => naming to docker.io/library/go-saas-kit-sys:latest                                                                                                          0.0s
+wsi@dev:~/developer/projects/rantipay/wankarlab/rantipay_saas$ cat > ~/developer/projects/rantipay/wankarlab/rantipay_saas/docker-compose-full-services-updated.yml << 'EOF'
+version: "3"
+
+services:
+  # Infraestructura básica
+  mysqld:
+    image: mysql:8.0
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=youShouldChangeThis
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=kit
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3406:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pyouShouldChangeThis"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+EOFtcd_data::ridgek-stoppeder/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+wsi@dev:~/developer/projects/rantipay/wankarlab/rantipay_saas$ cat > ~/developer/projects/rantipay/wankarlab/rantipay_saas/start-updated-services.sh << 'EOF'
+#!/bin/bash
+
+# Colores para mensajes
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+DOCKER_COMPOSE_FILE="docker-compose-full-services-updated.yml"
+
+echo -e "${YELLOW}==============================================${NC}"
+echo -e "${YELLOW}   Iniciando Rantipay SaaS con servicios completos (updated)   ${NC}"
+echo -e "${YELLOW}==============================================${NC}"
+echo ""
+
+# Paso 1: Detener cualquier instancia previa
+echo -e "${YELLOW}Paso 1: Deteniendo instancias previas...${NC}"
+docker compose -f $DOCKER_COMPOSE_FILE down 2>/dev/null || true
+echo -e "${GREEN}✓ Instancias previas detenidas${NC}"
+echo ""
+
+# Paso 2: Limpiar volúmenes antiguos
+chmod +x ~/developer/projects/rantipay/wankarlab/rantipay_saas/start-updated-services.shShouldChangeThis ping 2>/dev/null; then
+wsi@dev:~/developer/projects/rantipay/wankarlab/rantipay_saas$ cd ~/developer/projects/rantipay/wankarlab/rantipay_saas
+./start-updated-services.sh
+==============================================
+   Iniciando Rantipay SaaS con servicios completos (updated)   
+==============================================
+
+Paso 1: Deteniendo instancias previas...
+✓ Instancias previas detenidas
+
+Paso 2: Limpiando volúmenes antiguos...
+rantipay_saas_etcd_data
+rantipay_saas_mysql_data
+✓ Volúmenes antiguos limpiados
+
+Paso 3: Iniciando servicios de infraestructura...
+WARN[0000] /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/docker-compose-full-services-updated.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Running 6/6
+ ✔ Network rantipay_saas_app-network  Created                                                                                                                      0.1s 
+ ✔ Volume "rantipay_saas_mysql_data"  Created                                                                                                                      0.0s 
+ ✔ Volume "rantipay_saas_etcd_data"   Created                                                                                                                      0.0s 
+ ✔ Container rantipay_saas-redis-1    Started                                                                                                                      0.4s 
+ ✔ Container rantipay_saas-mysqld-1   Started                                                                                                                      0.4s 
+ ✔ Container rantipay_saas-etcd-1     Started                                                                                                                      0.3s 
+✓ Servicios de infraestructura iniciados
+
+Paso 4: Esperando a que los servicios de infraestructura estén disponibles...
+.....✓ MySQL está listo
+Paso 5: Inicializando base de datos...
+Verificando estado de MySQL...
+Verificando existencia de la base de datos 'kit'...
+Creando base de datos 'kit'...
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+Error al crear la base de datos 'kit'
+✓ Base de datos inicializada
+
+Paso 6: Inicializando ETCD...
+Verificando estado de ETCD...
+127.0.0.1:2379 is healthy: successfully committed proposal: took = 2.645051ms
+Registrando servicios en ETCD...
+Registrando servicio user...
+OK
+Registrando servicio saas...
+OK
+Registrando servicio sys...
+OK
+Servicios registrados correctamente en ETCD
+Verificando registros en ETCD...
+1. Servicio user:
+{"id":"1","name":"user","address":"user","port":9000,"metadata":{"kind":"grpc"}}
+2. Servicio saas:
+{"id":"1","name":"saas","address":"saas","port":9000,"metadata":{"kind":"grpc"}}
+3. Servicio sys:
+{"id":"1","name":"sys","address":"sys","port":9000,"metadata":{"kind":"grpc"}}
+ETCD ha sido inicializado correctamente
+✓ ETCD inicializado
+
+Paso 7: Iniciando servicio user...
+WARN[0000] /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/docker-compose-full-services-updated.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Running 4/4
+ ✔ Container rantipay_saas-etcd-1    Running                                                                                                                       0.0s 
+ ✔ Container rantipay_saas-mysqld-1  Running                                                                                                                       0.0s 
+ ✔ Container rantipay_saas-redis-1   Running                                                                                                                       0.0s 
+ ✔ Container rantipay_saas-user-1    Started                                                                                                                       0.3s 
+✓ Servicio user iniciado
+
+Paso 8: Verificando logs del servicio user...
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+
+Paso 9: Iniciando servicios restantes...
+WARN[0000] /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/docker-compose-full-services-updated.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Running 8/8
+ ✔ Container rantipay_saas-etcd-1    Running                                                                                                                       0.0s 
+ ✔ Container rantipay_saas-mysqld-1  Running                                                                                                                       0.0s 
+ ✔ Container rantipay_saas-redis-1   Running                                                                                                                       0.0s 
+ ✔ Container rantipay_saas-sys-1     Started                                                                                                                       0.3s 
+ ✔ Container rantipay_saas-saas-1    Started                                                                                                                       0.3s 
+ ✔ Container rantipay_saas-nginx-1   Started                                                                                                                       0.5s 
+ ✔ Container rantipay_saas-web-1     Started                                                                                                                       0.9s 
+ ✔ Container rantipay_saas-user-1    Started                                                                                                                       0.0s 
+✓ Todos los servicios iniciados
+
+Paso 10: Verificando estado de los servicios...
+2ead175f8f6d   goxiaoy/go-saas-kit-frontend:dev   "/docker-entrypoint.…"   1 second ago     Up Less than a second                   8080/tcp, 0.0.0.0:8080->80/tcp, [::]:8080->80/tcp                                          rantipay_saas-web-1
+2e8206bb7a33   nginx:1.21                         "/docker-entrypoint.…"   1 second ago     Restarting (1) Less than a second ago                                                                                              rantipay_saas-nginx-1
+018c699c0d46   go-saas-kit-sys:latest             "./sys -conf /data/c…"   1 second ago     Up Less than a second                   0.0.0.0:8003->8000/tcp, [::]:8003->8000/tcp, 0.0.0.0:9003->9000/tcp, [::]:9003->9000/tcp   rantipay_saas-sys-1
+dcc4dd730faf   go-saas-kit-saas:latest            "./saas -conf /data/…"   1 second ago     Restarting (2) Less than a second ago                                                                                              rantipay_saas-saas-1
+9f7170c6eb7c   go-saas-kit-user:latest            "./user -conf /data/…"   7 seconds ago    Restarting (2) 1 second ago                                                                                                        rantipay_saas-user-1
+694ae6ed8333   mysql:8.0                          "docker-entrypoint.s…"   13 seconds ago   Up 12 seconds (healthy)                 33060/tcp, 0.0.0.0:3406->3306/tcp, [::]:3406->3306/tcp                                     rantipay_saas-mysqld-1
+e220661468a2   redis:6.0                          "docker-entrypoint.s…"   13 seconds ago   Up 12 seconds (healthy)                 0.0.0.0:7379->6379/tcp, [::]:7379->6379/tcp                                                rantipay_saas-redis-1
+56d4485bce28   bitnami/etcd:3.5.0                 "/opt/bitnami/script…"   13 seconds ago   Up 12 seconds (healthy)                 2380/tcp, 0.0.0.0:3379->2379/tcp, [::]:3379->2379/tcp                                      rantipay_saas-etcd-1
+
+==============================================
+   Plataforma Rantipay SaaS iniciada   
+==============================================
+
+Frontend disponible en: http://localhost:8080
+API Gateway disponible en: http://localhost:81/v1/
+Servicios individuales disponibles en:
+  - User: http://localhost:8000/v1/user/
+  - SaaS: http://localhost:8002/v1/saas/
+  - Sys: http://localhost:8003/v1/sys/
+
+Para detener todos los servicios:
+docker compose -f docker-compose-full-services-updated.yml down
+
+wsi@dev:~/developer/projects/rantipay/wankarlab/rantipay_saas$ cat > ~/developer/projects/rantipay/wankarlab/rantipay_saas/docker-compose-hybrid.yml << 'EOF'
+version: "3"
+
+services:
+  # Infraestructura básica
+  mysqld:
+    image: mysql:8.0
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=youShouldChangeThis
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=kit
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3406:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pyouShouldChangeThis"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+chmod +x ~/developer/projects/rantipay/wankarlab/rantipay_saas/start-hybrid.sh00${NC}".conf << 'EOF'
+
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x78 pc=0x1dcd640]
+goroutine 1 [running]:
+main.main()
+        /home/wsi/developer/projects/rantipay/wankarlab/rantipay_saas/kit/user/cmd/user/main.go:166 +0xc80wsi@dev:~/developer/projects/rantipay/wankarlab/rantipay_saas$ docker logs rantipay_saas-user-1 2>&1 | less
+wsi@dev:~/developer/projects/rantipay/wankarlab/rantipay_saas$ docker ps
+CONTAINER ID   IMAGE                              COMMAND                  CREATED         STATUS                          PORTS                                                    NAMES
+2ead175f8f6d   goxiaoy/go-saas-kit-frontend:dev   "/docker-entrypoint.…"   2 minutes ago   Up 2 minutes                    8080/tcp, 0.0.0.0:8080->80/tcp, [::]:8080->80/tcp        rantipay_saas-web-1
+2e8206bb7a33   nginx:1.21                         "/docker-entrypoint.…"   2 minutes ago   Restarting (1) 27 seconds ago                                                            rantipay_saas-nginx-1
+018c699c0d46   go-saas-kit-sys:latest             "./sys -conf /data/c…"   2 minutes ago   Restarting (2) 26 seconds ago                                                            rantipay_saas-sys-1
+dcc4dd730faf   go-saas-kit-saas:latest            "./saas -conf /data/…"   2 minutes ago   Restarting (2) 26 seconds ago                                                            rantipay_saas-saas-1
+9f7170c6eb7c   go-saas-kit-user:latest            "./user -conf /data/…"   2 minutes ago   Restarting (2) 32 seconds ago                                                            rantipay_saas-user-1
+694ae6ed8333   mysql:8.0                          "docker-entrypoint.s…"   2 minutes ago   Up 2 minutes (healthy)          33060/tcp, 0.0.0.0:3406->3306/tcp, [::]:3406->3306/tcp   rantipay_saas-mysqld-1
+e220661468a2   redis:6.0                          "docker-entrypoint.s…"   2 minutes ago   Up 2 minutes (healthy)          0.0.0.0:7379->6379/tcp, [::]:7379->6379/tcp              rantipay_saas-redis-1
+56d4485bce28   bitnami/etcd:3.5.0                 "/opt/bitnami/script…"   2 minutes ago   Up 2 minutes (healthy)          2380/tcp, 0.0.0.0:3379->2379/tcp, [::]:3379->2379/tcp    rantipay_saas-etcd-1
+0d00f467b041   goxiaoy/go-saas-kit-frontend:dev   "/docker-entrypoint.…"   15 hours ago    Up 15 hours                     80/tcp, 8080/tcp                                         kit-frontend-web-1
+wsi@dev:~/developer/projects/rantipay/wankarlab/rantipay_saas$
+
+

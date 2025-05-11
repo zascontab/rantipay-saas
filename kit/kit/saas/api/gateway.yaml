@@ -1,4 +1,0 @@
-routes:
-  saas-api:
-    uris: ["/v1/saas/*","/assets/saas/*"]
-    upstream_id: saas-http

@@ -1,0 +1,22 @@
+app:
+  name: user
+  version: "1.0"
+  env: dev
+  host_display_name: GO-SAAS-KIT-USER
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 60s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 60s
+data:
+  database:
+    driver: mysql
+    source: root:youShouldChangeThis@tcp(mysqld:3306)/kit?parseTime=true
+  redis:
+    addr: redis:6379
+    password: youShouldChangeThis
+    db: 0
+logging:
+  level: debug

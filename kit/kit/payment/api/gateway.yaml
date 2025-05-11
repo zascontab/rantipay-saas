@@ -1,4 +1,0 @@
-routes:
-  payment-api:
-    uris: ["/v1/payment/*","/v1/subscription*","/assets/payment/*"]
-    upstream_id: payment-http

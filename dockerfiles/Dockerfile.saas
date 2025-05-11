@@ -1,0 +1,18 @@
+FROM debian:stable-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        netbase \
+        && rm -rf /var/lib/apt/lists/ \
+        && apt-get autoremove -y && apt-get autoclean -y
+
+WORKDIR /app
+
+COPY kit/bin/saas /app/
+COPY configs/saas /data/conf
+
+EXPOSE 8000
+EXPOSE 9000
+VOLUME /data/conf
+
+CMD ["./saas", "-conf", "/data/conf"]

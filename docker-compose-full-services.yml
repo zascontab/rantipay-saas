@@ -1,0 +1,171 @@
+version: "3"
+
+services:
+  # Infraestructura básica
+  mysqld:
+    image: mysql:8.0
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=youShouldChangeThis
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=kit
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3406:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pyouShouldChangeThis"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  redis:
+    image: redis:6.0
+    restart: always
+    command: redis-server --requirepass youShouldChangeThis
+    ports:
+      - "7379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "youShouldChangeThis", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  etcd:
+    image: bitnami/etcd:3.5.0
+    restart: always
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+    ports:
+      - "3379:2379"
+    volumes:
+      - etcd_data:/bitnami/etcd
+    healthcheck:
+      test: ["CMD", "etcdctl", "endpoint", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # API Gateway con NGINX
+  nginx:
+    image: nginx:1.21
+    ports:
+      - "81:80"
+    volumes:
+      - ./nginx-gateway/nginx-full.conf:/etc/nginx/nginx.conf:ro
+    restart: unless-stopped
+    depends_on:
+      - user
+      - saas
+      - sys
+    networks:
+      - app-network
+
+  # Servicios go-saas/kit
+  user:
+    image: go-saas-kit-user:latest
+    environment:
+      - TZ=UTC
+      - DB_HOST=mysqld
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=youShouldChangeThis
+      - DB_NAME=kit
+      - REGISTRY_ENDPOINT=http://etcd:2379
+      - REDIS_ADDR=redis:6379
+      - REDIS_PASSWORD=youShouldChangeThis
+      - LOGGING_LEVEL=debug
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+    volumes:
+      - ./configs:/data/conf
+    depends_on:
+      - mysqld
+      - redis
+      - etcd
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  saas:
+    image: go-saas-kit-saas:latest
+    environment:
+      - TZ=UTC
+      - DB_HOST=mysqld
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=youShouldChangeThis
+      - DB_NAME=kit
+      - REGISTRY_ENDPOINT=http://etcd:2379
+      - REDIS_ADDR=redis:6379
+      - REDIS_PASSWORD=youShouldChangeThis
+      - LOGGING_LEVEL=debug
+    ports:
+      - "8002:8000"
+      - "9002:9000"
+    volumes:
+      - ./configs:/data/conf
+    depends_on:
+      - mysqld
+      - redis
+      - etcd
+      - user
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  sys:
+    image: go-saas-kit-sys:latest
+    environment:
+      - TZ=UTC
+      - DB_HOST=mysqld
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=youShouldChangeThis
+      - DB_NAME=kit
+      - REGISTRY_ENDPOINT=http://etcd:2379
+      - REDIS_ADDR=redis:6379
+      - REDIS_PASSWORD=youShouldChangeThis
+      - LOGGING_LEVEL=debug
+    ports:
+      - "8003:8000"
+      - "9003:9000"
+    volumes:
+      - ./configs:/data/conf
+    depends_on:
+      - mysqld
+      - redis
+      - etcd
+      - user
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # Frontend
+  web:
+    image: goxiaoy/go-saas-kit-frontend:dev
+    ports:
+      - "8080:80"
+    volumes:
+      - ./kit-frontend/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - nginx
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  etcd_data:
