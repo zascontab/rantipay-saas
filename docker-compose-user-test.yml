@@ -1,0 +1,89 @@
+services:
+  # Infraestructura básica
+  mysqld:
+    image: mysql:8.0
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=youShouldChangeThis
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=kit
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3406:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pyouShouldChangeThis"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  redis:
+    image: redis:6.0
+    restart: always
+    command: redis-server --requirepass youShouldChangeThis
+    ports:
+      - "7379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "youShouldChangeThis", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  etcd:
+    image: bitnami/etcd:3.5.0
+    restart: always
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+    ports:
+      - "3379:2379"
+    volumes:
+      - etcd_data:/bitnami/etcd
+    healthcheck:
+      test: ["CMD", "etcdctl", "endpoint", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # Servicio User real de go-saas/kit - versión debug
+  user:
+    image: go-saas-kit-user:latest
+    command: ["/bin/bash", "-c", "ls -la /data/conf && cat /data/conf/config.yaml && echo '-----' && /app/user -conf /data/conf"]
+    environment:
+      - TZ=UTC
+      - APP_ENV=dev
+      - DB_HOST=mysqld
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=youShouldChangeThis
+      - DB_NAME=kit
+      - REGISTRY_ENDPOINT=http://etcd:2379
+      - REDIS_ADDR=redis:6379
+      - REDIS_PASSWORD=youShouldChangeThis
+      - LOGGING_LEVEL=debug
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+    volumes:
+      - ./configs/user:/data/conf
+    depends_on:
+      - mysqld
+      - redis
+      - etcd
+    restart: always
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  etcd_data:

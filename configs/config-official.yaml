@@ -1,18 +1,19 @@
 app:
-  name: user
+  name: go-saas-kit
   version: "1.0"
   env: dev
-  host_display_name: GO-SAAS-KIT-USER
-server:
-  http:
-    addr: 0.0.0.0:8000
-    timeout: 60s
-  grpc:
-    addr: 0.0.0.0:9000
-    timeout: 60s
-  health:
-    enabled: true
-    addr: 0.0.0.0:9001
+  host_display_name: GO-SAAS-KIT
+services:
+  registry:
+    type: etcd
+    endpoint: http://etcd:2379
+  endpoints:
+    tenant:
+      address: saas:9000
+    sys:
+      address: sys:9000
+    user:
+      address: user:9000
 data:
   endpoints:
     databases:
@@ -24,6 +25,17 @@ data:
         addrs: ["redis:6379"]
         password: youShouldChangeThis
     email: {}
+    events:
+      default:
+        topic: kit
+        addr: ""
+        type: memory
+      saas:
+        group: saas-golang
+      user:
+        group: user-golang
+      sys:
+        group: sys-golang
   vfs:
     -
       public_url: http://localhost/assets
