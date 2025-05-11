@@ -1,5 +1,4 @@
 app:
-  name: go-saas-kit
   host_display_name: GO-SAAS-KIT
 services:
   registry:
@@ -19,10 +18,51 @@ data:
     events:
       default:
         topic: kit
-        addr: kafka:9092
-        type: kafka
+        addr: ""  # Desactivar Kafka por ahora para simplificar
+        type: memory  # Usar memoria en lugar de Kafka
+      saas:
+        group: saas-golang
+      user:
+        group: user-golang
+      sys:
+        group: sys-golang
+      realtime:
+        group: realtime-golang
+      payment:
+        group: payment-golang
+      order:
+        group: order-golang
+      product:
+        group: product-golang
+  vfs:
+    -
+      public_url: http://localhost/assets
+      mount_path: "/"
+      os:
+        dir: ".assets"
+
+security:
+  jwt:
+    expire_in: 2592000s #    30 days
+    secret: 6efa4458-b245-40a3-9685-6b30d5dcda49
+  security_cookie:
+    hash_key: gt35ofggk07kdt7ief99bl51avd7pbhe
+  oidc:
+    hydra:
+      admin_url: http://hydra:4445
+
 logging:
   zap:
     level: "debug"
-    outputPaths: [ "stdout" ]
+    outputPaths: [ "stdout", "rolling://.temp/logs" ]
     errorOutputPaths: [ "stderr" ]
+    encoding: console
+    encoderConfig:
+      messageKey: message
+      levelKey: level
+      levelEncoder: lowercase
+
+# Desactivar tracing para simplificar inicialmente
+tracing:
+  otel:
+    enabled: false

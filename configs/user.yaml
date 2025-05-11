@@ -4,3 +4,14 @@ user:
     username: admin
     password: "123456"
   idp: {}
+  
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 60s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 60s
+  health:
+    enabled: true
+    addr: 0.0.0.0:9001

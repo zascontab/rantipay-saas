@@ -1,1 +1,15 @@
 sys:
+  apisix:
+    endpoint: http://apisix:9280
+    api_key: edd1c9f034335f136f87ad84b625c8f1
+
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 60s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 60s
+  health:
+    enabled: true
+    addr: 0.0.0.0:9001
