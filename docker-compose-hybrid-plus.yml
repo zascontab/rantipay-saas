@@ -60,24 +60,20 @@ services:
       - ./nginx-gateway/nginx-hybrid-plus.conf:/etc/nginx/nginx.conf:ro
     restart: unless-stopped
     depends_on:
-      - user
+      - simple-user
       - companies
     networks:
       - app-network
 
-  # Servicio User simplificado
-  user:
-    image: simple-user:debug
+  # Servicio de usuario simplificado (en lugar del servicio completo con problemas)
+  simple-user:
+    build:
+      context: ./simple-user
+      dockerfile: Dockerfile
     environment:
       - TZ=UTC
     ports:
       - "8000:8000"
-    volumes:
-      - ./configs:/data/conf
-    depends_on:
-      - mysqld
-      - redis
-      - etcd
     restart: unless-stopped
     networks:
       - app-network
