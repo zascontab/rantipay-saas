@@ -7,7 +7,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 echo -e "${YELLOW}==============================================${NC}"
-echo -e "${YELLOW}   Configuración completa de Rantipay SaaS    ${NC}"
+echo -e "${YELLOW}   Configuración de Rantipay SaaS con imágenes de Docker Hub   ${NC}"
 echo -e "${YELLOW}==============================================${NC}"
 echo ""
 
@@ -19,7 +19,7 @@ fi
 
 # Paso 1: Detener cualquier instancia previa
 echo -e "${YELLOW}Paso 1: Deteniendo instancias previas...${NC}"
-docker compose -f docker-compose-full.yml down
+docker compose -f docker-compose-dockerhub.yml down
 echo -e "${GREEN}✓ Instancias previas detenidas${NC}"
 echo ""
 
@@ -32,7 +32,7 @@ echo ""
 
 # Paso 3: Inicio de servicios de infraestructura
 echo -e "${YELLOW}Paso 3: Iniciando servicios de infraestructura...${NC}"
-docker compose -f docker-compose-full.yml up -d mysqld redis etcd
+docker compose -f docker-compose-dockerhub.yml up -d mysqld redis etcd
 echo -e "${GREEN}✓ Servicios de infraestructura iniciados${NC}"
 echo ""
 
@@ -101,18 +101,18 @@ echo ""
 # Paso 7: Iniciar servicios go-saas/kit
 echo -e "${YELLOW}Paso 7: Iniciando servicios go-saas/kit...${NC}"
 echo -e "${YELLOW}7.1: Iniciando servicio user...${NC}"
-docker compose -f docker-compose-full.yml up -d user
+docker compose -f docker-compose-dockerhub.yml up -d user
 sleep 10  # Esperar a que user esté listo
 
 echo -e "${YELLOW}7.2: Iniciando servicios saas y sys...${NC}"
-docker compose -f docker-compose-full.yml up -d saas sys
+docker compose -f docker-compose-dockerhub.yml up -d saas sys
 sleep 10  # Esperar a que todos los servicios estén listos
 echo -e "${GREEN}✓ Servicios go-saas/kit iniciados${NC}"
 echo ""
 
 # Paso 8: Iniciar API Gateway y Frontend
 echo -e "${YELLOW}Paso 8: Iniciando API Gateway y Frontend...${NC}"
-docker compose -f docker-compose-full.yml up -d nginx web
+docker compose -f docker-compose-dockerhub.yml up -d nginx web
 sleep 5  # Esperar a que el gateway y frontend estén listos
 echo -e "${GREEN}✓ API Gateway y Frontend iniciados${NC}"
 echo ""
@@ -134,7 +134,7 @@ echo -e "${GREEN}  - SaaS: http://localhost:8002${NC}"
 echo -e "${GREEN}  - Sys: http://localhost:8003${NC}"
 echo ""
 echo -e "${YELLOW}Para detener todos los servicios:${NC}"
-echo -e "${YELLOW}docker compose -f docker-compose-full.yml down${NC}"
+echo -e "${YELLOW}docker compose -f docker-compose-dockerhub.yml down${NC}"
 echo ""
 echo -e "${YELLOW}Para verificar el estado de los servicios:${NC}"
 echo -e "${YELLOW}./check-services.sh${NC}"

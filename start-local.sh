@@ -7,19 +7,20 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 echo -e "${YELLOW}==============================================${NC}"
-echo -e "${YELLOW}   Configuración completa de Rantipay SaaS    ${NC}"
+echo -e "${YELLOW}   Iniciando Rantipay SaaS con imágenes locales   ${NC}"
 echo -e "${YELLOW}==============================================${NC}"
 echo ""
 
-# Verificar si Docker está corriendo
-if ! docker info > /dev/null 2>&1; then
-    echo -e "${RED}Error: Docker no está en ejecución${NC}"
+# Verificar si docker-compose-local.yml existe
+if [ ! -f "docker-compose-local.yml" ]; then
+    echo -e "${RED}Error: No se encontró el archivo docker-compose-local.yml${NC}"
+    echo -e "${YELLOW}Debes ejecutar primero build-local-images.sh para generar este archivo${NC}"
     exit 1
 fi
 
 # Paso 1: Detener cualquier instancia previa
 echo -e "${YELLOW}Paso 1: Deteniendo instancias previas...${NC}"
-docker compose -f docker-compose-full.yml down
+docker compose -f docker-compose-local.yml down
 echo -e "${GREEN}✓ Instancias previas detenidas${NC}"
 echo ""
 
@@ -32,7 +33,7 @@ echo ""
 
 # Paso 3: Inicio de servicios de infraestructura
 echo -e "${YELLOW}Paso 3: Iniciando servicios de infraestructura...${NC}"
-docker compose -f docker-compose-full.yml up -d mysqld redis etcd
+docker compose -f docker-compose-local.yml up -d mysqld redis etcd
 echo -e "${GREEN}✓ Servicios de infraestructura iniciados${NC}"
 echo ""
 
@@ -101,26 +102,64 @@ echo ""
 # Paso 7: Iniciar servicios go-saas/kit
 echo -e "${YELLOW}Paso 7: Iniciando servicios go-saas/kit...${NC}"
 echo -e "${YELLOW}7.1: Iniciando servicio user...${NC}"
-docker compose -f docker-compose-full.yml up -d user
-sleep 10  # Esperar a que user esté listo
+docker compose -f docker-compose-local.yml up -d user
+sleep 5  # Esperar a que user esté listo
 
 echo -e "${YELLOW}7.2: Iniciando servicios saas y sys...${NC}"
-docker compose -f docker-compose-full.yml up -d saas sys
-sleep 10  # Esperar a que todos los servicios estén listos
+docker compose -f docker-compose-local.yml up -d saas sys
+sleep 5  # Esperar a que todos los servicios estén listos
 echo -e "${GREEN}✓ Servicios go-saas/kit iniciados${NC}"
 echo ""
 
 # Paso 8: Iniciar API Gateway y Frontend
 echo -e "${YELLOW}Paso 8: Iniciando API Gateway y Frontend...${NC}"
-docker compose -f docker-compose-full.yml up -d nginx web
+docker compose -f docker-compose-local.yml up -d nginx web
 sleep 5  # Esperar a que el gateway y frontend estén listos
 echo -e "${GREEN}✓ API Gateway y Frontend iniciados${NC}"
 echo ""
 
 # Paso 9: Verificar todos los servicios
-echo -e "${YELLOW}Paso 9: Verificando todos los servicios...${NC}"
-./check-services.sh
-echo ""
+echo -e "${YELLOW}Paso 9: Verificando estado de los servicios...${NC}"
+
+# Verificar servicio user
+echo -e "${YELLOW}Verificando servicio user:${NC}"
+if curl -s http://localhost:8000/health 2>/dev/null | grep -q "OK"; then
+    echo -e "${GREEN}  ✓ User Service está funcionando correctamente${NC}"
+else
+    echo -e "${RED}  ✗ User Service no está funcionando correctamente${NC}"
+    echo -e "${YELLOW}  Mostrando logs del servicio user:${NC}"
+    docker logs --tail 20 $(docker ps -q -f name=rantipay_saas-user) 2>/dev/null || echo "No se pudieron obtener logs"
+fi
+
+# Verificar servicio saas
+echo -e "${YELLOW}Verificando servicio saas:${NC}"
+if curl -s http://localhost:8002/health 2>/dev/null | grep -q "OK"; then
+    echo -e "${GREEN}  ✓ SaaS Service está funcionando correctamente${NC}"
+else
+    echo -e "${RED}  ✗ SaaS Service no está funcionando correctamente${NC}"
+    echo -e "${YELLOW}  Mostrando logs del servicio saas:${NC}"
+    docker logs --tail 20 $(docker ps -q -f name=rantipay_saas-saas) 2>/dev/null || echo "No se pudieron obtener logs"
+fi
+
+# Verificar servicio sys
+echo -e "${YELLOW}Verificando servicio sys:${NC}"
+if curl -s http://localhost:8003/health 2>/dev/null | grep -q "OK"; then
+    echo -e "${GREEN}  ✓ Sys Service está funcionando correctamente${NC}"
+else
+    echo -e "${RED}  ✗ Sys Service no está funcionando correctamente${NC}"
+    echo -e "${YELLOW}  Mostrando logs del servicio sys:${NC}"
+    docker logs --tail 20 $(docker ps -q -f name=rantipay_saas-sys) 2>/dev/null || echo "No se pudieron obtener logs"
+fi
+
+# Verificar API Gateway
+echo -e "${YELLOW}Verificando API Gateway:${NC}"
+if curl -s http://localhost:81/health 2>/dev/null | grep -q "Gateway"; then
+    echo -e "${GREEN}  ✓ API Gateway está funcionando correctamente${NC}"
+else
+    echo -e "${RED}  ✗ API Gateway no está funcionando correctamente${NC}"
+    echo -e "${YELLOW}  Mostrando logs del API Gateway:${NC}"
+    docker logs --tail 15 $(docker ps -q -f name=rantipay_saas-nginx) 2>/dev/null || echo "No se pudieron obtener logs"
+fi
 
 echo -e "${GREEN}==============================================${NC}"
 echo -e "${GREEN}   Plataforma Rantipay SaaS lista para usar   ${NC}"
@@ -134,7 +173,8 @@ echo -e "${GREEN}  - SaaS: http://localhost:8002${NC}"
 echo -e "${GREEN}  - Sys: http://localhost:8003${NC}"
 echo ""
 echo -e "${YELLOW}Para detener todos los servicios:${NC}"
-echo -e "${YELLOW}docker compose -f docker-compose-full.yml down${NC}"
+echo -e "${YELLOW}docker compose -f docker-compose-local.yml down${NC}"
 echo ""
-echo -e "${YELLOW}Para verificar el estado de los servicios:${NC}"
-echo -e "${YELLOW}./check-services.sh${NC}"
+echo -e "${YELLOW}Para ver logs de un servicio específico:${NC}"
+echo -e "${YELLOW}docker logs -f rantipay_saas-[nombre_servicio]-1${NC}"
+echo -e "${YELLOW}Ejemplo: docker logs -f rantipay_saas-user-1${NC}"

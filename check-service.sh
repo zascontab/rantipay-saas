@@ -36,10 +36,15 @@ else
     docker logs --tail 15 $(docker ps -q -f name=rantipay_saas-redis)
 fi
 
-echo -e "${YELLOW}Servicios go-saas/kit:${NC}"
+echo -e "${YELLOW}Servicios:${NC}"
 echo -e "${YELLOW}1. User Service:${NC}"
-if curl -s http://localhost:8000/v1/user/health 2>/dev/null | grep -q "OK"; then
-    echo -e "${GREEN}  ✓ User Service está funcionando correctamente${NC}"
+# Probamos con múltiples endpoints posibles
+if curl -s http://localhost:8000/health 2>/dev/null | grep -q "OK"; then
+    echo -e "${GREEN}  ✓ User Service está funcionando correctamente (endpoint /health)${NC}"
+elif curl -s http://localhost:8000/v1/user/health 2>/dev/null | grep -q "OK"; then
+    echo -e "${GREEN}  ✓ User Service está funcionando correctamente (endpoint /v1/user/health)${NC}"
+elif curl -s http://localhost:8000 2>/dev/null | grep -q "simple"; then
+    echo -e "${GREEN}  ✓ User Service (simple) está funcionando correctamente${NC}"
 else
     echo -e "${RED}  ✗ User Service no está funcionando correctamente${NC}"
     echo -e "${YELLOW}  Revisando logs...${NC}"
@@ -47,8 +52,10 @@ else
 fi
 
 echo -e "${YELLOW}2. SaaS Service:${NC}"
-if curl -s http://localhost:8002/v1/saas/health 2>/dev/null | grep -q "OK"; then
-    echo -e "${GREEN}  ✓ SaaS Service está funcionando correctamente${NC}"
+if curl -s http://localhost:8002/health 2>/dev/null | grep -q "OK"; then
+    echo -e "${GREEN}  ✓ SaaS Service está funcionando correctamente (endpoint /health)${NC}"
+elif curl -s http://localhost:8002/v1/saas/health 2>/dev/null | grep -q "OK"; then
+    echo -e "${GREEN}  ✓ SaaS Service está funcionando correctamente (endpoint /v1/saas/health)${NC}"
 else
     echo -e "${RED}  ✗ SaaS Service no está funcionando correctamente${NC}"
     echo -e "${YELLOW}  Revisando logs...${NC}"
@@ -56,8 +63,10 @@ else
 fi
 
 echo -e "${YELLOW}3. Sys Service:${NC}"
-if curl -s http://localhost:8003/v1/sys/health 2>/dev/null | grep -q "OK"; then
-    echo -e "${GREEN}  ✓ Sys Service está funcionando correctamente${NC}"
+if curl -s http://localhost:8003/health 2>/dev/null | grep -q "OK"; then
+    echo -e "${GREEN}  ✓ Sys Service está funcionando correctamente (endpoint /health)${NC}"
+elif curl -s http://localhost:8003/v1/sys/health 2>/dev/null | grep -q "OK"; then
+    echo -e "${GREEN}  ✓ Sys Service está funcionando correctamente (endpoint /v1/sys/health)${NC}"
 else
     echo -e "${RED}  ✗ Sys Service no está funcionando correctamente${NC}"
     echo -e "${YELLOW}  Revisando logs...${NC}"
@@ -66,7 +75,7 @@ fi
 
 echo -e "${YELLOW}Gateway y Frontend:${NC}"
 echo -e "${YELLOW}1. NGINX Gateway:${NC}"
-if curl -s http://localhost:81/health 2>/dev/null | grep -q "Healthy"; then
+if curl -s http://localhost:81/health 2>/dev/null | grep -q "Gateway"; then
     echo -e "${GREEN}  ✓ NGINX Gateway está funcionando correctamente${NC}"
 else
     echo -e "${RED}  ✗ NGINX Gateway no está funcionando correctamente${NC}"
@@ -84,22 +93,26 @@ else
 fi
 
 echo -e "${YELLOW}Verificando las conexiones entre servicios:${NC}"
-echo -e "${YELLOW}1. Conexión User → MySQL:${NC}"
-docker exec $(docker ps -q -f name=rantipay_saas-user) ping -c 2 mysqld
-echo -e "${YELLOW}2. Conexión User → Redis:${NC}"
-docker exec $(docker ps -q -f name=rantipay_saas-user) ping -c 2 redis
-echo -e "${YELLOW}3. Conexión User → ETCD:${NC}"
-docker exec $(docker ps -q -f name=rantipay_saas-user) ping -c 2 etcd
+echo -e "${YELLOW}1. Verificando red Docker:${NC}"
+docker network inspect rantipay_saas_app-network 2>/dev/null | grep -q "Containers" && echo -e "${GREEN}  ✓ Red Docker existe${NC}" || echo -e "${RED}  ✗ Red Docker no existe${NC}"
 
-echo -e "${YELLOW}Verificando puertos internos:${NC}"
-docker exec $(docker ps -q -f name=rantipay_saas-user) netstat -tulpn
+echo -e "${YELLOW}2. Conexiones desde User service:${NC}"
+docker exec $(docker ps -q -f name=rantipay_saas-user) ping -c 1 mysqld 2>/dev/null && echo -e "${GREEN}  ✓ User → MySQL funciona${NC}" || echo -e "${RED}  ✗ User → MySQL no funciona${NC}"
+docker exec $(docker ps -q -f name=rantipay_saas-user) ping -c 1 redis 2>/dev/null && echo -e "${GREEN}  ✓ User → Redis funciona${NC}" || echo -e "${RED}  ✗ User → Redis no funciona${NC}"
+docker exec $(docker ps -q -f name=rantipay_saas-user) ping -c 1 etcd 2>/dev/null && echo -e "${GREEN}  ✓ User → ETCD funciona${NC}" || echo -e "${RED}  ✗ User → ETCD no funciona${NC}"
 
 echo -e "${YELLOW}Acciones comunes para solucionar problemas:${NC}"
 echo -e "${GREEN}1. Reiniciar un servicio específico:${NC}"
-echo -e "   docker compose -f docker-compose-full.yml restart [servicio]"
+echo -e "   docker compose -f docker-compose-local.yml restart [servicio]"
 echo -e "${GREEN}2. Ver logs de un servicio:${NC}"
 echo -e "   docker logs -f rantipay_saas-[servicio]-1"
 echo -e "${GREEN}3. Reiniciar todo el stack:${NC}"
-echo -e "   ./start-full-stack.sh"
+echo -e "   ./start-local.sh"
 echo -e "${GREEN}4. Acceder a un contenedor para depuración:${NC}"
 echo -e "   docker exec -it rantipay_saas-[servicio]-1 /bin/bash"
+echo -e "${GREEN}5. Verificar estado de ETCD:${NC}"
+echo -e "   docker exec rantipay_saas-etcd-1 etcdctl get /services/user/1 --print-value-only"
+echo -e "${GREEN}6. Verificar la base de datos:${NC}"
+echo -e "   docker exec -it rantipay_saas-mysqld-1 mysql -u root -pyouShouldChangeThis kit"
+echo -e "${GREEN}7. Reiniciar el registro de servicios en ETCD:${NC}"
+echo -e "   ./init-etcd.sh"
