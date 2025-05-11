@@ -26,6 +26,22 @@ type User struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
+// MenuItem representa un ítem del menú
+type MenuItem struct {
+	ID         string      `json:"id"`
+	ParentID   string      `json:"parent_id"`
+	Name       string      `json:"name"`
+	Route      string      `json:"route"`
+	Component  string      `json:"component"`
+	Path       string      `json:"path,omitempty"`
+	Redirect   string      `json:"redirect,omitempty"`
+	Meta       interface{} `json:"meta,omitempty"`
+	Sort       int         `json:"sort"`
+	Children   []MenuItem  `json:"children,omitempty"`
+	Permission string      `json:"permission,omitempty"`
+	Type       string      `json:"type"`
+}
+
 // Middleware para CORS
 func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -180,6 +196,114 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
+// Controlador para menús disponibles
+func menusHandler(w http.ResponseWriter, r *http.Request) {
+	// Menú simplificado para el dashboard
+	menus := []MenuItem{
+		{
+			ID:        "dashboard",
+			Name:      "Dashboard",
+			Route:     "/dashboard",
+			Component: "LAYOUT",
+			Path:      "/dashboard",
+			Meta: map[string]interface{}{
+				"title":    "Dashboard",
+				"icon":     "DashboardOutlined",
+				"hideMenu": false,
+				"order":    1,
+			},
+			Sort: 1,
+			Type: "dir",
+			Children: []MenuItem{
+				{
+					ID:        "workbench",
+					ParentID:  "dashboard",
+					Name:      "Workbench",
+					Route:     "workbench",
+					Component: "/dashboard/workbench/index",
+					Path:      "workbench",
+					Meta: map[string]interface{}{
+						"title":    "Workbench",
+						"icon":     "AppstoreOutlined",
+						"hideMenu": false,
+						"order":    1,
+					},
+					Sort: 1,
+					Type: "menu",
+				},
+			},
+		},
+		{
+			ID:        "system",
+			Name:      "System",
+			Route:     "/system",
+			Component: "LAYOUT",
+			Path:      "/system",
+			Meta: map[string]interface{}{
+				"title":    "System",
+				"icon":     "SettingOutlined",
+				"hideMenu": false,
+				"order":    100,
+			},
+			Sort: 100,
+			Type: "dir",
+			Children: []MenuItem{
+				{
+					ID:        "users",
+					ParentID:  "system",
+					Name:      "Users",
+					Route:     "users",
+					Component: "/system/users/index",
+					Path:      "users",
+					Meta: map[string]interface{}{
+						"title":    "Users",
+						"icon":     "UserOutlined",
+						"hideMenu": false,
+						"order":    1,
+					},
+					Sort: 1,
+					Type: "menu",
+				},
+				{
+					ID:        "companies",
+					ParentID:  "system",
+					Name:      "Companies",
+					Route:     "companies",
+					Component: "/system/companies/index",
+					Path:      "companies",
+					Meta: map[string]interface{}{
+						"title":    "Companies",
+						"icon":     "BankOutlined",
+						"hideMenu": false,
+						"order":    2,
+					},
+					Sort: 2,
+					Type: "menu",
+				},
+			},
+		},
+	}
+	
+	w.Header().Set("Content-Type", "application/json")
+	resp := Response{
+		Data: menus,
+		Code: 0,
+		Msg:  "ok",
+	}
+	json.NewEncoder(w).Encode(resp)
+}
+
+// Controlador para el websocket de tiempo real
+func realtimeHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusNotImplemented)
+	resp := Response{
+		Code: 1,
+		Msg:  "Realtime service not implemented in this version",
+	}
+	json.NewEncoder(w).Encode(resp)
+}
+
 // Función principal
 func main() {
 	// Rutas con middleware
@@ -188,6 +312,10 @@ func main() {
 	http.HandleFunc("/v1/auth/logout", corsMiddleware(logHandler(logoutHandler)))
 	http.HandleFunc("/v1/user/me", corsMiddleware(logHandler(currentUserHandler)))
 	http.HandleFunc("/v1/user/all", corsMiddleware(logHandler(listUsersHandler)))
+	
+	// Nuevas rutas para compatibilidad con go-saas/kit
+	http.HandleFunc("/v1/sys/menus/available", corsMiddleware(logHandler(menusHandler)))
+	http.HandleFunc("/v1/realtime/connect/ws", corsMiddleware(logHandler(realtimeHandler)))
 	
 	// Iniciar servidor
 	port := 8000
