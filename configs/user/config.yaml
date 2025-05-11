@@ -1,72 +1,28 @@
-app:
-  name: user
-  version: "1.0"
-  env: dev
-  host_display_name: RANTIPAY-USER
-services:
-  registry:
-    type: etcd
-    endpoint: http://etcd:2379
-  endpoints:
-    tenant:
-      address: saas:9000
-    sys:
-      address: sys:9000
-    user:
-      address: user:9000
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 60s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 60s
 data:
-  endpoints:
-    databases:
-      default:
-        driver: mysql
-        source: root:youShouldChangeThis@tcp(mysqld:3306)/kit?parseTime=true&loc=Local&charset=utf8mb4&interpolateParams=true
-    redis:
-      default:
-        addrs: ["redis:6379"]
-        password: youShouldChangeThis
-    email: {}
-    events:
-      default:
-        topic: kit
-        addr: ""
-        type: memory
-      saas:
-        group: saas-golang
-      user:
-        group: user-golang
-      sys:
-        group: sys-golang
-  vfs:
-    -
-      public_url: http://localhost/assets
-      mount_path: "/"
-      os:
-        dir: ".assets"
+  database:
+    driver: mysql
+    source: root:youShouldChangeThis@tcp(mysqld:3306)/kit?parseTime=true&loc=Local&charset=utf8mb4&interpolateParams=true
+  redis:
+    addr: redis:6379
+    password: youShouldChangeThis
+    db: 0
 security:
   jwt:
     expire_in: 2592000s # 30 days
-    secret: rantipay-jwt-secret-key-change-in-production
+    secret: youShouldChangeThis
   security_cookie:
-    hash_key: rantipay-cookie-hash-key-change-in-production
-  oidc:
-    hydra:
-      admin_url: http://hydra:4445
+    hash_key: youShouldChangeThis
 user:
   password_score_min: 0
   admin:
     username: admin@rantipay.com
     password: "Admin123!"
-  idp: {}
 logging:
-  zap:
-    level: debug
-    outputPaths: ["stdout", "rolling://.temp/logs"]
-    errorOutputPaths: ["stderr"]
-    encoding: console
-    encoderConfig:
-      messageKey: message
-      levelKey: level
-      levelEncoder: lowercase
-tracing:
-  otel:
-    enabled: false
+  level: debug
