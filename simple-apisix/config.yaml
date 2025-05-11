@@ -1,6 +1,6 @@
 etcd:
   host:
-    - "http://etcd:2379"  # Utilizando el nombre de servicio en la red Docker
+    - "http://etcd:2379"  # Cambiado de 127.0.0.1:2379 a etcd:2379
   prefix: "/apisix"
   timeout: 30
 

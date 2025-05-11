@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  # APISIX en modo standalone con configuración mínima
+  apisix:
+    image: apache/apisix:3.2.0-debian
+    ports:
+      - "80:9080"
+      - "9180:9180"
+    environment:
+      - APISIX_STAND_ALONE=true
+    restart: unless-stopped
+
+  # Simple Frontend
+  web:
+    image: nginx:1.21
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+  # Simple backend
+  user:
+    image: simple-user:debug
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
