@@ -1,0 +1,158 @@
+invalid log level: , switching to default: INFO
+DEBUG msg=config loaded: config.yaml format: yaml
+2025/05/12 18:36:10 Register *di.Container
+2025/05/12 18:36:10 Register server.Name
+2025/05/12 18:36:10 Register *conf.Services
+2025/05/12 18:36:10 Register *conf.Security
+2025/05/12 18:36:10 Register *conf.SysConf
+2025/05/12 18:36:10 Register *conf.Data
+2025/05/12 18:36:10 Register *conf.AppConfig
+2025/05/12 18:36:10 Register *conf.Dev
+2025/05/12 18:36:10 Register log.Logger
+2025/05/12 18:36:10 Register []grpc.ClientOption
+2025/05/12 18:36:10 Register *authz.DefaultAuthorizationService
+2025/05/12 18:36:10 Register authz.Service
+2025/05/12 18:36:10 Register *authz.SubjectResolverImpl
+2025/05/12 18:36:10 Register authz.SubjectResolver
+2025/05/12 18:36:10 Register jwt.Tokenizer
+2025/05/12 18:36:10 Register *jwt.TokenizerConfig
+2025/05/12 18:36:10 Register http.DecodeRequestFunc
+2025/05/12 18:36:10 Register http.EncodeResponseFunc
+2025/05/12 18:36:10 Register http.EncodeErrorFunc
+2025/05/12 18:36:10 Register registry.Registrar
+2025/05/12 18:36:10 Register *http.WebMultiTenancyOption
+2025/05/12 18:36:10 Register *conf.Client
+2025/05/12 18:36:10 Register *api.Option
+2025/05/12 18:36:10 Register *api.InMemoryTokenManager
+2025/05/12 18:36:10 Register api.TokenManager
+2025/05/12 18:36:10 Register api.TrustedContextValidator
+2025/05/12 18:36:10 Register registry.Discovery
+2025/05/12 18:36:10 Register data.ConnStrResolver
+2025/05/12 18:36:10 Register data.ConnStrings
+2025/05/12 18:36:10 Register *gorm.SqlDbCache
+2025/05/12 18:36:10 Register *gorm.DbCache
+2025/05/12 18:36:10 Register gorm.DbProvider
+2025/05/12 18:36:10 Register dal.ConstDbProvider
+2025/05/12 18:36:10 Register uow.Manager
+2025/05/12 18:36:10 Register vfs.Blob
+2025/05/12 18:36:10 Register *redis.UniversalOptions
+2025/05/12 18:36:10 Register redis.UniversalClient
+2025/05/12 18:36:10 Register store.StoreInterface
+2025/05/12 18:36:10 Register *cache.Cache[string]
+2025/05/12 18:36:10 Register cache.CacheInterface[string]
+2025/05/12 18:36:10 Register email.Client
+2025/05/12 18:36:10 Register event.Producer
+2025/05/12 18:36:10 Register *eventbus.EventBus
+2025/05/12 18:36:10 Register asynq.RedisConnOpt
+2025/05/12 18:36:10 Register *asynq.Client
+2025/05/12 18:36:10 Register server.Init
+2025/05/12 18:36:10 Register *service.Helper
+2025/05/12 18:36:10 Register *service.MsgService
+2025/05/12 18:36:10 Register v1.MsgServiceServer
+2025/05/12 18:36:10 Register *data.BarrierMigrator
+2025/05/12 18:36:10 Register *data.StorageMigrator
+2025/05/12 18:36:10 Register *data.Migrator
+2025/05/12 18:36:10 Register http.ServiceRegister
+2025/05/12 18:36:10 Register grpc.ServiceRegister
+2025/05/12 18:36:10 Register *api.UserTenantContrib
+2025/05/12 18:36:10 Register session.RefreshTokenProvider
+2025/05/12 18:36:10 Register *api.PermissionChecker
+2025/05/12 18:36:10 Register authz.PermissionChecker
+2025/05/12 18:36:10 Register authz.PermissionManagementService
+2025/05/12 18:36:10 Register api.GrpcConn
+2025/05/12 18:36:10 Register v1.UserServiceServer
+2025/05/12 18:36:10 Register v1.UserInternalServiceServer
+2025/05/12 18:36:10 Register v1.AuthServer
+2025/05/12 18:36:10 Register v1.AccountServer
+2025/05/12 18:36:10 Register v1.RoleServiceServer
+2025/05/12 18:36:10 Register v1.PermissionServiceServer
+2025/05/12 18:36:10 Register v1.PermissionInternalServiceServer
+2025/05/12 18:36:10 Register saas.TenantStore
+2025/05/12 18:36:10 Register api.GrpcConn
+2025/05/12 18:36:10 Register v1.TenantServiceServer
+2025/05/12 18:36:10 Register v1.TenantInternalServiceServer
+2025/05/12 18:36:10 Register *http.Server
+2025/05/12 18:36:10 Register transport.Server
+2025/05/12 18:36:10 Register *grpc.Server
+2025/05/12 18:36:10 Register transport.Server
+2025/05/12 18:36:10 Register *job.Server
+2025/05/12 18:36:10 Register transport.Server
+2025/05/12 18:36:10 Register seed.Seeder
+2025/05/12 18:36:10 Register api.ClientName
+2025/05/12 18:36:10 Register dal.ConnName
+2025/05/12 18:36:10 Register seed.Contrib
+2025/05/12 18:36:10 Register *authz.Option
+2025/05/12 18:36:10 Register *data.Data
+2025/05/12 18:36:10 Register *data.Migrate
+2025/05/12 18:36:10 Register biz.MenuRepo
+2025/05/12 18:36:10 Register *client.APIClient
+2025/05/12 18:36:10 Register *biz.MenuSeed
+2025/05/12 18:36:10 Register *biz.ApisixSeed
+2025/05/12 18:36:10 Register *job.Handler
+2025/05/12 18:36:10 Register *apisix.Option
+2025/05/12 18:36:10 Register *apisix.AdminClient
+2025/05/12 18:36:10 Register *apisix.WatchSyncAdmin
+2025/05/12 18:36:10 Register http.ServiceRegister
+2025/05/12 18:36:10 Register grpc.ServiceRegister
+2025/05/12 18:36:10 Register *service.ClientService
+2025/05/12 18:36:10 Register v1.ClientServiceServer
+2025/05/12 18:36:10 Register *service.KeyService
+2025/05/12 18:36:10 Register v1.KeyServiceServer
+2025/05/12 18:36:10 Register http.ServiceRegister
+2025/05/12 18:36:10 Register grpc.ServiceRegister
+2025/05/12 18:36:10 Register *service.MenuService
+2025/05/12 18:36:10 Register v1.MenuServiceServer
+2025/05/12 18:36:10 Register *service.LocaleService
+2025/05/12 18:36:10 Register v1.LocaleServiceServer
+2025/05/12 18:36:10 Register *kratos.App
+2025/05/12 18:36:10 Resolved log.Logger
+2025/05/12 18:36:10 Resolved *conf.Services
+2025/05/12 18:36:10 Resolved *conf.Security
+2025/05/12 18:36:10 Resolved *jwt.TokenizerConfig
+2025/05/12 18:36:10 Resolved jwt.Tokenizer
+2025/05/12 18:36:10 Resolved *conf.Data
+2025/05/12 18:36:10 Resolved *gorm.SqlDbCache
+2025/05/12 18:36:10 Resolved *gorm.DbCache
+2025/05/12 18:36:10 Resolved uow.Manager
+2025/05/12 18:36:10 Resolved http.DecodeRequestFunc
+2025/05/12 18:36:10 Resolved http.EncodeResponseFunc
+2025/05/12 18:36:10 Resolved http.EncodeErrorFunc
+2025/05/12 18:36:10 Resolved *api.Option
+2025/05/12 18:36:10 Resolved api.TrustedContextValidator
+2025/05/12 18:36:10 Resolved data.ConnStrings
+2025/05/12 18:36:10 Resolved dal.ConstDbProvider
+2025/05/12 18:36:10 Resolved dal.ConnName
+2025/05/12 18:36:10 Resolved *service.MsgService
+2025/05/12 18:36:10 Resolved http.ServiceRegister
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x38 pc=0x1762fa8]
+
+goroutine 1 [running]:
+github.com/go-saas/kit/oidc/data.NewHydra(0xc0000f45a0)
+	/home/wsi/developer/projects/rantipay/wankarlab/project/rantipay-saas/kit/oidc/data/data.go:17 +0x108
+reflect.Value.call({0x1dc4be0?, 0x3b4a3a8?, 0x41d8c5?}, {0x2252a76, 0x4}, {0xc000013e78, 0x1, 0x10?})
+	/usr/local/go/src/reflect/value.go:596 +0xca6
+reflect.Value.Call({0x1dc4be0?, 0x3b4a3a8?, 0x2129c00?}, {0xc000013e78?, 0xc0006acd50?, 0x41551b?})
+	/usr/local/go/src/reflect/value.go:380 +0xb9
+github.com/goava/di.constructorCompiler.compile({0x1, {{0x458fbca, 0x29}, {0x40f1030, 0x1dc4be0}, {0x1dc4be0, 0x3b4a3a8, 0x13}}}, {0xc000013e78, 0x1, ...}, ...)
+	/home/wsi/go/pkg/mod/github.com/goava/di@v1.11.1/cmp_ctor.go:50 +0x72
+github.com/goava/di.(*node).Value(0xc0007c2e10, {0x40c7888, 0xc0004e2c00})
+	/home/wsi/go/pkg/mod/github.com/goava/di@v1.11.1/node.go:74 +0x275
+github.com/goava/di.(*node).Value(0xc0007c30e0, {0x40c7888, 0xc0004e2c00})
+	/home/wsi/go/pkg/mod/github.com/goava/di@v1.11.1/node.go:68 +0x10d
+github.com/goava/di.(*node).Value(0xc0007c3040, {0x40c7888, 0xc0004e2c00})
+	/home/wsi/go/pkg/mod/github.com/goava/di@v1.11.1/node.go:68 +0x10d
+github.com/goava/di.(*node).Value(0xc0007c3630, {0x40c7888, 0xc0004e2c00})
+	/home/wsi/go/pkg/mod/github.com/goava/di@v1.11.1/node.go:68 +0x10d
+github.com/goava/di.(*node).Value(0xc0007c2a00, {0x40c7888, 0xc0004e2c00})
+	/home/wsi/go/pkg/mod/github.com/goava/di@v1.11.1/node.go:68 +0x10d
+github.com/goava/di.(*node).Value(0xc0007c35e0, {0x40c7888, 0xc0004e2c00})
+	/home/wsi/go/pkg/mod/github.com/goava/di@v1.11.1/node.go:68 +0x10d
+github.com/goava/di.(*node).Value(0xc0007c3400, {0x40c7888, 0xc0004e2c00})
+	/home/wsi/go/pkg/mod/github.com/goava/di@v1.11.1/node.go:68 +0x10d
+github.com/goava/di.(*Container).invoke(0xc000706a20, {0x1db1040, 0x3b48df8}, {0x1?, 0xc0004e2c00?, 0xc000706a20?})
+	/home/wsi/go/pkg/mod/github.com/goava/di@v1.11.1/container.go:349 +0x4a8
+github.com/goava/di.(*Container).Invoke(0xc0006add98?, {0x1db1040?, 0x3b48df8?}, {0x0?, 0x0?, 0xc00064bf80?})
+	/home/wsi/go/pkg/mod/github.com/goava/di@v1.11.1/container.go:111 +0x25
+main.main()
+	/home/wsi/developer/projects/rantipay/wankarlab/project/rantipay-saas/kit/sys/cmd/sys/main.go:186 +0x1148

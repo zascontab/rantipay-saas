@@ -1,9 +1,8 @@
-version: '3'
-
 services:
   # Infraestructura
   etcd:
     image: bitnami/etcd:3.5.0
+    container_name: etcd
     environment:
       - ALLOW_NONE_AUTHENTICATION=yes
       - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
@@ -16,6 +15,7 @@ services:
 
   mysql:
     image: mysql:8.0
+    container_name: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=rantipay123
       - MYSQL_ROOT_HOST=%
@@ -29,6 +29,7 @@ services:
 
   redis:
     image: redis:6.0
+    container_name: redis
     command: redis-server --requirepass rantipay123
     ports:
       - "6379:6379"
@@ -38,9 +39,12 @@ services:
   # API Gateway
   apisix:
     image: apache/apisix:2.15.0-alpine
+    container_name: apisix
     volumes:
-      - ./kit/deploy/apisix/config.yaml:/usr/local/apisix/conf/config.yaml:ro
-      - ./kit/deploy/apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro
+      - ./apisix-config.yaml:/usr/local/apisix/conf/config.yaml
+    environment:
+      - ETCD_HOST=etcd
+      - ETCD_PORT=2379
     ports:
       - "9080:9080"
       - "9180:9180"
@@ -51,12 +55,22 @@ services:
 
   apisix-dashboard:
     image: apache/apisix-dashboard:2.15.0-alpine
-    volumes:
-      - ./kit/deploy/apisix/dashboard_conf/conf.yaml:/usr/local/apisix-dashboard/conf/conf.yaml:ro
+    container_name: apisix-dashboard
     ports:
-      - "9000:9000"
+      - "9001:9000"  # Cambiado de 9000 a 9001 para evitar conflictos
     depends_on:
       - apisix
+    networks:
+      - rantipay-network
+
+  # Frontend
+  web:
+    image: goxiaoy/go-saas-kit-frontend:dev
+    container_name: frontend
+    environment:
+      - API_URL=http://apisix:9080
+    ports:
+      - "8090:80"
     networks:
       - rantipay-network
 
@@ -67,11 +81,3 @@ networks:
 volumes:
   mysql_data:
   etcd_data:
-
-  # Frontend temporal
-  web:
-    image: goxiaoy/go-saas-kit-frontend:dev
-    ports:
-      - "8080:80"
-    networks:
-      - rantipay-network

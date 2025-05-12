@@ -1,0 +1,77 @@
+version: '3'
+
+services:
+  # Infraestructura
+  etcd:
+    image: bitnami/etcd:3.5.0
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+    ports:
+      - "2379:2379"
+    volumes:
+      - etcd_data:/bitnami/etcd
+    networks:
+      - rantipay-network
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=rantipay123
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=rantipay
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - rantipay-network
+
+  redis:
+    image: redis:6.0
+    command: redis-server --requirepass rantipay123
+    ports:
+      - "6379:6379"
+    networks:
+      - rantipay-network
+
+  # API Gateway
+  apisix:
+    image: apache/apisix:2.15.0-alpine
+    volumes:
+      - ./kit/deploy/apisix/config.yaml:/usr/local/apisix/conf/config.yaml:ro
+      - ./kit/deploy/apisix/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro
+    ports:
+      - "9080:9080"
+      - "9180:9180"
+    depends_on:
+      - etcd
+    networks:
+      - rantipay-network
+
+  apisix-dashboard:
+    image: apache/apisix-dashboard:2.15.0-alpine
+    volumes:
+      - ./kit/deploy/apisix/dashboard_conf/conf.yaml:/usr/local/apisix-dashboard/conf/conf.yaml:ro
+    ports:
+      - "9000:9000"
+    depends_on:
+      - apisix
+    networks:
+      - rantipay-network
+
+networks:
+  rantipay-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  etcd_data:
+
+  # Frontend temporal
+  web:
+    image: goxiaoy/go-saas-kit-frontend:dev
+    ports:
+      - "8080:80"
+    networks:
+      - rantipay-network

@@ -1,0 +1,1 @@
+# Este archivo está vacío intencionalmente

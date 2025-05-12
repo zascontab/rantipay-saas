@@ -27,17 +27,18 @@ data:
       default:
         addrs: ["localhost:6379"]
         password: rantipay123
-    email: {}
     events:
       default:
         topic: kit
         addr: ""
-        type: memory
+        type: ""
       saas:
         group: saas-golang
 security:
   jwt:
-    expire_in: 2592000s # 30 days
+    expire_in: 2592000s
     secret: rantipay-jwt-super-secret-key
 logging:
   level: debug
+event:
+  driver: ""

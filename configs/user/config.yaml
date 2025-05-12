@@ -24,31 +24,23 @@ data:
       default:
         addrs: ["localhost:6379"]
         password: rantipay123
-    email: {}
     events:
       default:
         topic: kit
         addr: ""
-        type: memory
+        type: ""
       user:
         group: user-golang
-  vfs:
-    -
-      public_url: http://localhost/assets
-      mount_path: "/"
-      os:
-        dir: ".assets"
 security:
   jwt:
-    expire_in: 2592000s # 30 days
+    expire_in: 2592000s
     secret: rantipay-jwt-super-secret-key
-  security_cookie:
-    hash_key: rantipay-cookie-hash-key
 user:
   password_score_min: 0
   admin:
     username: admin@rantipay.com
     password: "Admin123!"
-  idp: {}
 logging:
   level: debug
+event:
+  driver: ""
