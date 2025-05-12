@@ -3,16 +3,16 @@ app:
 services:
   registry:
     type: etcd
-    endpoint: http://etcd:2379
+    endpoint: http://localhost:3379
 data:
   endpoints:
     databases:
       default:
         driver: mysql
-        source: root:youShouldChangeThis@tcp(mysqld:3306)/kit?parseTime=true&loc=Local&charset=utf8mb4&interpolateParams=true
+        source: root:youShouldChangeThis@tcp(localhost:3406)/kit?parseTime=true&loc=Local&charset=utf8mb4&interpolateParams=true
     redis:
       default:
-        addrs: ["redis:6379"]
+        addrs: ["localhost:7379"]
         password: youShouldChangeThis
     email: {}
     events:
@@ -51,7 +51,7 @@ security:
     hash_key: gt35ofggk07kdt7ief99bl51avd7pbhe
   oidc:
     hydra:
-      admin_url: http://hydra:4445
+      admin_url: http://localhost:4445
 
 logging:
   zap:
@@ -66,4 +66,15 @@ logging:
 
 tracing:
   otel:
-    grpc: otel-collector:4317
+    grpc: otel-collector:4317i18n:
+  default: en-US
+  supported:
+    - en-US
+    - zh-CN
+    - es-ES
+i18n:
+  default: en-US
+  supported:
+    - en-US
+    - zh-CN
+    - es-ES

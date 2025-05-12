@@ -2,21 +2,42 @@ app:
   name: saas
   version: "1.0"
   env: dev
-  host_display_name: GO-SAAS-KIT-SAAS
+  host_display_name: RANTIPAY-SAAS
 server:
   http:
-    addr: 0.0.0.0:8000
+    addr: 0.0.0.0:8001
     timeout: 60s
   grpc:
-    addr: 0.0.0.0:9000
+    addr: 0.0.0.0:9001
     timeout: 60s
+services:
+  registry:
+    type: etcd
+    endpoint: http://localhost:2379
+  endpoints:
+    user:
+      address: localhost:9000
 data:
-  database:
-    driver: mysql
-    source: root:youShouldChangeThis@tcp(mysqld:3306)/kit?parseTime=true
-  redis:
-    addr: redis:6379
-    password: youShouldChangeThis
-    db: 0
+  endpoints:
+    databases:
+      default:
+        driver: mysql
+        source: root:rantipay123@tcp(localhost:3306)/rantipay?parseTime=true&loc=Local&charset=utf8mb4&interpolateParams=true
+    redis:
+      default:
+        addrs: ["localhost:6379"]
+        password: rantipay123
+    email: {}
+    events:
+      default:
+        topic: kit
+        addr: ""
+        type: memory
+      saas:
+        group: saas-golang
+security:
+  jwt:
+    expire_in: 2592000s # 30 days
+    secret: rantipay-jwt-super-secret-key
 logging:
   level: debug

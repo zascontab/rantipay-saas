@@ -1,3 +1,8 @@
+app:
+  name: user
+  version: "1.0"
+  env: dev
+  host_display_name: RANTIPAY-USER
 server:
   http:
     addr: 0.0.0.0:8000
@@ -5,24 +10,45 @@ server:
   grpc:
     addr: 0.0.0.0:9000
     timeout: 60s
+services:
+  registry:
+    type: etcd
+    endpoint: http://localhost:2379
 data:
-  database:
-    driver: mysql
-    source: root:youShouldChangeThis@tcp(mysqld:3306)/kit?parseTime=true&loc=Local&charset=utf8mb4&interpolateParams=true
-  redis:
-    addr: redis:6379
-    password: youShouldChangeThis
-    db: 0
+  endpoints:
+    databases:
+      default:
+        driver: mysql
+        source: root:rantipay123@tcp(localhost:3306)/rantipay?parseTime=true&loc=Local&charset=utf8mb4&interpolateParams=true
+    redis:
+      default:
+        addrs: ["localhost:6379"]
+        password: rantipay123
+    email: {}
+    events:
+      default:
+        topic: kit
+        addr: ""
+        type: memory
+      user:
+        group: user-golang
+  vfs:
+    -
+      public_url: http://localhost/assets
+      mount_path: "/"
+      os:
+        dir: ".assets"
 security:
   jwt:
     expire_in: 2592000s # 30 days
-    secret: youShouldChangeThis
+    secret: rantipay-jwt-super-secret-key
   security_cookie:
-    hash_key: youShouldChangeThis
+    hash_key: rantipay-cookie-hash-key
 user:
   password_score_min: 0
   admin:
     username: admin@rantipay.com
     password: "Admin123!"
+  idp: {}
 logging:
   level: debug

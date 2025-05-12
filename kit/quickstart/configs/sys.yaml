@@ -1,17 +1,4 @@
-server:
-  http:
-    addr: 0.0.0.0:8000
-    timeout: 1s
-  grpc:
-    addr: 0.0.0.0:9000
-    timeout: 1s
-data:
-  database:
-    driver: mysql
-    source: root:youShouldChangeThis@tcp(mysqld:3306)/kit?parseTime=true
-  redis:
-    addr: redis:6379
-    password: youShouldChangeThis
-    dial_timeout: 1s
-    read_timeout: 0.4s
-    write_timeout: 0.6s
+sys:
+  apisix:
+    endpoint: http://localhost:9280
+    api_key: edd1c9f034335f136f87ad84b625c8f1
