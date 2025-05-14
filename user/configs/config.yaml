@@ -1,0 +1,16 @@
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 1s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 1s
+data:
+  database:
+    driver: mysql
+    source: root:youShouldChangeThis@tcp(localhost:3406)/user_db
+  redis:
+    addr: localhost:7379
+    password: youShouldChangeThis
+    read_timeout: 0.2s
+    write_timeout: 0.2s

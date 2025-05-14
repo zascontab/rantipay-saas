@@ -1,0 +1,107 @@
+version: '3.7'
+services:
+
+  apisix:
+    image: ${DOCKER_REGISTRY}go-saas-kit-apisix:${DOCKER_TAG:-latest}
+    volumes:
+      - ./quickstart/configs/apisix/apisix_conf/config.yaml:/usr/local/apisix/conf/config.yaml:ro
+      - ./quickstart/configs:/data/conf
+    depends_on:
+      - user
+      - saas
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  user:
+    image: ${DOCKER_REGISTRY}go-saas-kit-user:${DOCKER_TAG:-latest}
+    depends_on:
+      - mysqld
+      - redis
+    volumes:
+      - ./quickstart/configs:/data/conf
+      - ./quickstart/.assets:/app/.assets
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./user/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  saas:
+    image: ${DOCKER_REGISTRY}go-saas-kit-saas:${DOCKER_TAG:-latest}
+    depends_on:
+      - user
+    volumes:
+      - ./quickstart/configs:/data/conf
+      - ./quickstart/.assets:/app/.assets
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./saas/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  realtime:
+    image: ${DOCKER_REGISTRY}go-saas-kit-realtime:${DOCKER_TAG:-latest}
+    depends_on:
+      - user
+    volumes:
+      - ./quickstart/configs:/data/conf
+      - ./quickstart/.assets:/app/.assets
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./realtime/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  sys:
+    image: ${DOCKER_REGISTRY}go-saas-kit-sys:${DOCKER_TAG:-latest}
+    depends_on:
+      - user
+      - saas
+    volumes:
+      - ./quickstart/configs:/data/conf
+      - ./quickstart/.assets:/app/.assets
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./sys/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  payment:
+    image: ${DOCKER_REGISTRY}go-saas-kit-payment:${DOCKER_TAG:-latest}
+    volumes:
+      - ./quickstart/configs:/data/conf
+      - ./quickstart/.assets:/app/.assets
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./payment/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  order:
+    image: ${DOCKER_REGISTRY}go-saas-kit-order:${DOCKER_TAG:-latest}
+    volumes:
+      - ./quickstart/configs:/data/conf
+      - ./quickstart/.assets:/app/.assets
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./order/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  product:
+    image: ${DOCKER_REGISTRY}go-saas-kit-product:${DOCKER_TAG:-latest}
+    volumes:
+      - ./quickstart/configs:/data/conf
+      - ./quickstart/.assets:/app/.assets
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./product/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

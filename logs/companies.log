@@ -1,3 +1,0 @@
-[Companies] 2025/05/12 17:02:57 Starting Companies service...
-[Companies] 2025/05/12 17:02:57 Companies service is listening on :8010
-[Companies] 2025/05/12 17:02:57 Failed to start server: listen tcp :8010: bind: address already in use

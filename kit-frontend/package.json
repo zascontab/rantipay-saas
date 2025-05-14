@@ -44,8 +44,6 @@
     "not ie <= 10"
   ],
   "dependencies": {
-    "@gosaas/core": "workspace:*",
-    "@gosaas/api": "workspace:*",
     "@ant-design/icons": "^4.7.0",
     "@ant-design/pro-components": "2.3.53",
     "@ant-design/use-emotion-css": "1.0.4",

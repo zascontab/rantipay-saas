@@ -1,14 +1,27 @@
 {
   "compilerOptions": {
-    "target": "ES2019",
-    "module": "CommonJS",
+    "target": "esnext",
+    "module": "esnext",
     "moduleResolution": "node",
     "declaration": true,
-    "outDir": "./dist",
-    "strict": false,
+    "declarationMap": true,
+    "composite": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "strictFunctionTypes": false,
+    "jsx": "preserve",
+    "allowJs": true,
+    "sourceMap": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "outDir": "./dist"
   },
-  "include": ["src"]
+  "exclude": ["node_modules", "dist", "**/*.js"],
+  "include": ["./"]
 }

@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package user.api.auth.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+import "google/protobuf/wrappers.proto";
+
+option go_package = "github.com/go-saas/kit/user/api/auth/v1;v1";
+
+// Solicitud para enviar un código OTP por teléfono
+message SendPhoneOtpRequest {
+  string phone = 1 [(validate.rules).string = {min_len: 1, max_len: 20}]; // Número de teléfono al que enviar el OTP
+  string purpose = 2 [(validate.rules).string = {in: ["login", "register", "reset_password"]}]; // Propósito del OTP
+}
+
+// Respuesta al enviar un código OTP por teléfono
+message SendPhoneOtpResponse {
+  bool success = 1;     // Indica si el envío fue exitoso
+  string message = 2;   // Mensaje informativo para el usuario
+  // Token solo se devuelve en entorno de desarrollo/pruebas
+  google.protobuf.StringValue debug_token = 3; // Solo para desarrollo/pruebas
+}
+
+// Solicitud para verificar un código OTP enviado por teléfono
+message VerifyPhoneOtpRequest {
+  string phone = 1 [(validate.rules).string = {min_len: 1, max_len: 20}];  // Número de teléfono
+  string token = 2 [(validate.rules).string = {min_len: 1}];  // Código OTP
+  string purpose = 3 [(validate.rules).string = {in: ["login", "register", "reset_password"]}]; // Propósito del OTP
+  bool web = 4;      // Si es para interfaz web
+}
+
+// Respuesta a la verificación de un código OTP
+message VerifyPhoneOtpResponse {
+  bool success = 1;       // Indica si la verificación fue exitosa
+  string user_id = 2;     // ID del usuario (si existe)
+  bool user_exists = 3;   // Indica si el usuario ya existe
+  string access_token = 4; // Token de acceso (JWT)
+  int32 expires_in = 5;    // Tiempo de expiración en segundos
+  string token_type = 6;   // Tipo de token (Bearer)
+  string refresh_token = 7; // Token de actualización
+}
+
+// Solicitud para registrar un usuario con teléfono
+message RegisterByPhoneRequest {
+  string phone = 1 [(validate.rules).string = {min_len: 1, max_len: 20}]; // Número de teléfono
+  string token = 2 [(validate.rules).string = {min_len: 1}]; // Código OTP verificado
+  string username = 3;   // Nombre de usuario opcional
+  string password = 4;   // Contraseña opcional
+  bool web = 5;          // Si es para interfaz web
+}
+
+// Respuesta al registro con teléfono
+message RegisterByPhoneResponse {
+  string user_id = 1;      // ID del usuario creado
+  string access_token = 2; // Token de acceso (JWT)
+  int32 expires_in = 3;    // Tiempo de expiración en segundos
+  string token_type = 4;   // Tipo de token (Bearer)
+  string refresh_token = 5; // Token de actualización
+}
+
+// Solicitud para iniciar sesión con teléfono y OTP
+message LoginByPhoneRequest {
+  string phone = 1 [(validate.rules).string = {min_len: 1, max_len: 20}]; // Número de teléfono
+  string token = 2 [(validate.rules).string = {min_len: 1}]; // Código OTP verificado
+  bool web = 3;      // Si es para interfaz web
+}
+
+// Respuesta al inicio de sesión con teléfono
+message LoginByPhoneResponse {
+  string user_id = 1;      // ID del usuario
+  string access_token = 2; // Token de acceso (JWT)
+  int32 expires_in = 3;    // Tiempo de expiración en segundos
+  string token_type = 4;   // Tipo de token (Bearer)
+  string refresh_token = 5; // Token de actualización
+}
+
+// Servicio de autenticación por teléfono
+service PhoneAuthService {
+  // Envía un código OTP a un número de teléfono
+  rpc SendPhoneOtp(SendPhoneOtpRequest) returns (SendPhoneOtpResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/phone/otp/send"
+      body: "*"
+    };
+  }
+  
+  // Verifica un código OTP enviado a un número de teléfono
+  rpc VerifyPhoneOtp(VerifyPhoneOtpRequest) returns (VerifyPhoneOtpResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/phone/otp/verify"
+      body: "*"
+    };
+  }
+  
+  // Registra un nuevo usuario con número de teléfono
+  rpc RegisterByPhone(RegisterByPhoneRequest) returns (RegisterByPhoneResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/register/phone"
+      body: "*"
+    };
+  }
+  
+  // Inicia sesión con número de teléfono y OTP
+  rpc LoginByPhone(LoginByPhoneRequest) returns (LoginByPhoneResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/login/phone"
+      body: "*"
+    };
+  }
+}

@@ -1,6 +1,0 @@
-user_not_found:
-  message: "Usuario no encontrado"
-  code: 404
-invalid_credentials:
-  message: "Credenciales inválidas"
-  code: 401

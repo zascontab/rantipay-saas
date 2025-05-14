@@ -1,0 +1,9 @@
+{
+  "uri": "/user/*",
+  "upstream": {
+    "type": "roundrobin",
+    "nodes": {
+      "host.docker.internal:8000": 1
+    }
+  }
+}
