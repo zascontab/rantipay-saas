@@ -602,4 +602,3 @@ func (um *UserManager) checkPassword(ctx context.Context, u *User, password stri
 	}
 	return um.pwdHasher.VerifyHashedPassword(ctx, u, *u.Password, password)
 }
-

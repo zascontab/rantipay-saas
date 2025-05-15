@@ -34,5 +34,3 @@ bin/
 .vscode/
 .idea/
 *.swp
-# Ignorar archivos grandes en tmp
-tmp/main

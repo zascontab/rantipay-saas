@@ -34,4 +34,3 @@ bin/
 .vscode/
 .idea/
 *.swp
-tmp/main

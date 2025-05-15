@@ -10,10 +10,8 @@ import (
 	"github.com/go-saas/kit/pkg/utils"
 	v1 "github.com/go-saas/kit/user/api/auth/v1"
 	"github.com/go-saas/kit/user/private/biz"
-
-	"net/http"
-
 	client "github.com/ory/hydra-client-go/v2"
+	"net/http"
 )
 
 type Auth struct {

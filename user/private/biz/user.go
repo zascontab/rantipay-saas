@@ -2,8 +2,6 @@ package biz
 
 import (
 	"context"
-	"time"
-
 	"github.com/go-saas/kit/pkg/data"
 	kitgorm "github.com/go-saas/kit/pkg/gorm"
 	v1 "github.com/go-saas/kit/user/api/user/v1"
@@ -11,6 +9,7 @@ import (
 	concurrency "github.com/goxiaoy/gorm-concurrency/v2"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
+	"time"
 )
 
 type User struct {
@@ -30,11 +29,8 @@ type User struct {
 	NormalizedUsername *string `json:"normalized_username" gorm:"index:,size:200"`
 
 	// Phone
-	//Phone          *string `json:"phone" gorm:"index:,size:200"`
-	//PhoneConfirmed bool    `json:"phone_confirmed"`
-	// Phone - Campos que añadiremos
-	Phone          *string `json:"phone" gorm:"index:,size:20"` // Añadir este campo
-	PhoneConfirmed bool    `json:"phone_confirmed"`             // Añadir este campo
+	Phone          *string `json:"phone" gorm:"index:,size:200"`
+	PhoneConfirmed bool    `json:"phone_confirmed"`
 
 	// Email
 	Email *string `json:"email"`

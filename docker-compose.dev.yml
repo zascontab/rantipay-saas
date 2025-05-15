@@ -1,32 +1,41 @@
-version: '3.7'
-
+version: '3.8'
 services:
   user:
+    image: golang:1.23
+    working_dir: /app/user
+    command: sh -c "go install github.com/air-verse/air@latest && air"
     volumes:
       - ./user:/app/user
+    ports:
+      - "8000:8000"
     environment:
-      - DATA_DATABASE_SOURCE=root:youShouldChangeThis@tcp(mysqld:3306)/user_db
-      - ETCD_ADDRESS=etcd:2379
-      - REDIS_ADDR=redis:6379
-      - REDIS_PASSWORD=youShouldChangeThis
-    restart: on-failure
-
+      - GO111MODULE=on
+    depends_on:
+      - mysqld
+      - redis
+      - etcd
+      - dtm
+    networks:
+      - kit_default
   saas:
+    image: golang:1.23
+    working_dir: /app/saas
+    command: sh -c "go install github.com/air-verse/air@latest && air"
     volumes:
       - ./saas:/app/saas
+    ports:
+      - "8001:8001"
     environment:
-      - DATA_DATABASE_SOURCE=root:youShouldChangeThis@tcp(mysqld:3306)/saas_db
-      - ETCD_ADDRESS=etcd:2379
-      - REDIS_ADDR=redis:6379
-      - REDIS_PASSWORD=youShouldChangeThis
-    restart: on-failure
-
-  sys:
-    volumes:
-      - ./sys:/app/sys
-    environment:
-      - DATA_DATABASE_SOURCE=root:youShouldChangeThis@tcp(mysqld:3306)/sys_db
-      - ETCD_ADDRESS=etcd:2379
-      - REDIS_ADDR=redis:6379
-      - REDIS_PASSWORD=youShouldChangeThis
-    restart: on-failure
+      - GO111MODULE=on
+    depends_on:
+      - mysqld
+      - redis
+      - etcd
+      - dtm
+    networks:
+      - kit_default
+  # Agrega los demás microservicios (order, product, sys, payment, realtime)
+  # con puertos incrementales: 8002, 8003, 8004, 8005, 8006
+networks:
+  kit_default:
+    external: true
