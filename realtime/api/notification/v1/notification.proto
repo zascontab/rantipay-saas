@@ -3,7 +3,7 @@ syntax = "proto3";
 package notification.v1;
 
 import "google/protobuf/timestamp.proto";
-import "google/api/annotations.proto";
+import "google/api/annotations/annotations.proto";
 import "google/protobuf/field_mask.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/empty.proto";

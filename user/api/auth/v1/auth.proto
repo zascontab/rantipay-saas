@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package user.api.auth.v1;
 
-import "google/api/annotations.proto";
+import "google/api/annotations/annotations.proto";
 import "google/api/field_behavior.proto";
 
 import "google/protobuf/wrappers.proto";

@@ -3,14 +3,13 @@ package biz
 import (
 	"context"
 	"fmt"
-	"time"
-
 	"github.com/eko/gocache/v3/cache"
 	"github.com/eko/gocache/v3/store"
 	cache2 "github.com/go-saas/kit/pkg/cache"
 	v1 "github.com/go-saas/kit/user/api/auth/v1"
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/proto"
+	"time"
 )
 
 type UserTokenProvider interface {
@@ -180,13 +179,9 @@ func (p *TwoStepTokenProvider[T]) Retrieve(ctx context.Context, purpose TokenPur
 	return t, nil
 }
 
-// OtpTokenProvider interfaz para generar y verificar tokens OTP
 type OtpTokenProvider interface {
-	// GenerateOtp genera un token OTP para un propósito y destinatario específicos
-	GenerateOtp(ctx context.Context, purpose string, recipient string, duration time.Duration) (string, error)
-
-	// VerifyOtp verifica un token OTP para un propósito y destinatario específicos
-	VerifyOtp(ctx context.Context, purpose string, recipient string, code string) (bool, error)
+	GenerateOtp(ctx context.Context, purpose TokenPurpose, extraKey string, duration time.Duration) (string, error)
+	VerifyOtp(ctx context.Context, purpose TokenPurpose, extraKey string, token string) (bool, error)
 }
 
 type DefaultOtpTokenProvider struct {

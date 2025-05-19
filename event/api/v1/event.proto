@@ -3,7 +3,7 @@ syntax = "proto3";
 package event.api.v1;
 import "errors/errors.proto";
 import "google/protobuf/empty.proto";
-import "google/api/annotations.proto";
+import "google/api/annotations/annotations.proto";
 import "validate/validate.proto";
 
 option go_package = "github.com/go-saas/kit/event/api/v1;v1";

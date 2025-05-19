@@ -2,8 +2,6 @@ package service
 
 import (
 	_ "embed"
-	"net/http"
-
 	"github.com/flowchartsman/swaggerui"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-kratos/kratos/v2/middleware"
@@ -24,6 +22,7 @@ import (
 	uhttp "github.com/go-saas/kit/user/private/service/http"
 	"github.com/goava/di"
 	"github.com/goxiaoy/vfs"
+	"net/http"
 )
 
 //go:embed openapi/api.swagger.json

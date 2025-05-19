@@ -1,9 +1,0 @@
-{
-  "uri": "/saas/*",
-  "upstream": {
-    "type": "roundrobin",
-    "nodes": {
-      "host.docker.internal:8001": 1
-    }
-  }
-}

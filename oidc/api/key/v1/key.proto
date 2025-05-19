@@ -3,7 +3,7 @@ syntax = "proto3";
 package oidc.api.key;
 import "errors/errors.proto";
 import "google/protobuf/empty.proto";
-import "google/api/annotations.proto";
+import "google/api/annotations/annotations.proto";
 import "validate/validate.proto";
 import "google/api/field_behavior.proto";
 

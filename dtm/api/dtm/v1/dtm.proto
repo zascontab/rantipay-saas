@@ -3,7 +3,7 @@ syntax = "proto3";
 package dtm.api.dtm.v1;
 import "errors/errors.proto";
 import "google/protobuf/empty.proto";
-import "google/api/annotations.proto";
+import "google/api/annotations/annotations.proto";
 
 option go_package = "github.com/go-saas/kit/dtm/api/dtm/v1;v1";
 

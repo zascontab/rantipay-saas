@@ -154,7 +154,6 @@ func (u *UserRepo) FindByPhone(ctx context.Context, phone string) (*biz.User, er
 	return user, nil
 }
 
-
 func (u *UserRepo) FindByEmail(ctx context.Context, email string) (*biz.User, error) {
 	user := &biz.User{}
 	err := u.GetDb(ctx).Model(&biz.User{}).Scopes(u.BuildDetailScope(true)).First(user, "normalized_email = ?", email).Error

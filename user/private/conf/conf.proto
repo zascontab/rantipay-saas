@@ -23,6 +23,7 @@ message Bootstrap {
   .stripe.Conf stripe=501;
 }
 
+
 message Admin{
   string username =1;
   string password=2;
@@ -43,16 +44,8 @@ message UserConf{
   google.protobuf.Duration phone_recover_expiry = 8;
   // default to 5m
   google.protobuf.Duration login_passwordless_expiry=9;
+
   optional google.protobuf.StringValue totp_2fa_issuer=100;
   idp.Config idp=200;
-  
-  // Configuración para el servicio OTP externo
-  message OtpServiceConf {
-    string service_url = 1;
-    google.protobuf.Duration timeout = 2;
-    bool debug_mode = 3; // Modo debug (devuelve tokens en respuestas)
-    string api_key = 4;  // API key para el servicio OTP (opcional)
-  }
-  
-  OtpServiceConf otp_service = 300;
 }
+

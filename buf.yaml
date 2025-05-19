@@ -1,0 +1,13 @@
+version: v1
+deps:
+  - buf.build/googleapis/googleapis
+  - buf.build/gogo/protobuf
+  - buf.build/envoyproxy/protoc-gen-validate
+lint:
+  use:
+    - DEFAULT
+  except:
+    - FIELD_LOWER_SNAKE_CASE
+breaking:
+  use:
+    - FILE

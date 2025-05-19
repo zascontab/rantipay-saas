@@ -46,9 +46,3 @@ buf/*
 # Local config files
 *.local.yml
 *.local.yaml
-
-# Local dev files
-
-saas/tmp/*
-user/tmp/*
-sys/tmp/*

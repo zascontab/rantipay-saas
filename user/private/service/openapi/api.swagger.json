@@ -214,7 +214,7 @@
         ]
       },
       "put": {
-        "summary": "UpdateProfile\r\nAvatar: POST form file /v1/account/avatar",
+        "summary": "UpdateProfile\nAvatar: POST form file /v1/account/avatar",
         "operationId": "Account_UpdateProfile",
         "responses": {
           "200": {
@@ -616,7 +616,7 @@
     },
     "/v1/auth/password/forget": {
       "post": {
-        "summary": "ForgetPassword\r\nverify forget password token",
+        "summary": "ForgetPassword\nverify forget password token",
         "operationId": "Auth_ForgetPassword",
         "responses": {
           "200": {
@@ -681,7 +681,7 @@
     },
     "/v1/auth/password/validate": {
       "post": {
-        "summary": "ValidatePassword\r\nserver validation for password strength",
+        "summary": "ValidatePassword\nserver validation for password strength",
         "operationId": "Auth_ValidatePassword",
         "responses": {
           "200": {
@@ -4518,7 +4518,7 @@
         "expires": {
           "type": "integer",
           "format": "int32",
-          "title": "Expires time in seconds\r\nDeprecated, use expires_in instead"
+          "title": "Expires time in seconds\nDeprecated, use expires_in instead"
         },
         "refreshToken": {
           "type": "string",

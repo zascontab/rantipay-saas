@@ -3,10 +3,6 @@ package service
 import (
 	"context"
 	"fmt"
-	"io"
-	"os"
-	"path/filepath"
-
 	"github.com/go-saas/kit/pkg/conf"
 	"github.com/go-saas/kit/pkg/data"
 	"github.com/go-saas/kit/pkg/query"
@@ -15,6 +11,9 @@ import (
 	"github.com/go-saas/saas"
 	"github.com/goxiaoy/vfs"
 	"google.golang.org/protobuf/types/known/structpb"
+	"io"
+	"os"
+	"path/filepath"
 
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -24,7 +23,6 @@ import (
 	v12 "github.com/go-saas/kit/user/api/role/v1"
 	v1 "github.com/go-saas/kit/user/api/user/v1"
 	"github.com/go-saas/kit/user/private/biz"
-
 	"github.com/google/uuid"
 	"github.com/samber/lo"
 	"google.golang.org/protobuf/types/known/fieldmaskpb"

@@ -1,9 +1,0 @@
-{
-  "uri": "/sys/*",
-  "upstream": {
-    "type": "roundrobin",
-    "nodes": {
-      "host.docker.internal:8002": 1
-    }
-  }
-}
